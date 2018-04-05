@@ -9,8 +9,17 @@
 <html>
   <head>
     <title>$Title$</title>
+    <script src="jquery-3.2.1.min.js"></script>
   </head>
   <body>
-
+<script>
+    $.ajax({
+        type: "POST",
+        url: "rest/hello/create",
+        data: '{"param1":"Michael", "param2":"Jordan"}',
+        contentType: "application/json",
+        succes: alert("product is gewijzigd")
+    });
+</script>
   </body>
 </html>

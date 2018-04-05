@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="GO PLAN IT:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/GO_PLAN_IT_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="GO PLAN IT/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="GO PLAN IT" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="JAX-WS-Glassfish / JAX-WS 2.2 RI / Metro 1.X / JWSDP 2.2" />
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-bundle:1.19.4" />
+          <element id="library" level="project" name="Maven: javax.ws.rs:jsr311-api:1.1.1" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

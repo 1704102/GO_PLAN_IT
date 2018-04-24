@@ -1,0 +1,79 @@
+body{
+    background-color: #51caff;
+}
+.header{
+    display: block;
+}
+.logo{
+    max-width: 80px;
+    height: auto;
+}
+.logo:hover{
+    cursor: pointer;
+}
+.menu{
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+    width: 80px;
+}
+.menuItem{
+    display: none;
+    position: relative;
+    left: 20px;
+    padding-bottom: 10px;
+}
+.content{
+    position: relative;
+    top: 100px;
+    width: 80%;
+    display: block;
+    background-color: white;
+    margin: auto;
+}
+table {
+    margin: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+table tr{
+    border-bottom: 1px solid black;
+    margin: -1px;
+}
+
+table tr th{
+    width: 12.5%;
+    height: 30px;
+    margin: -1px;
+    padding: 0;
+}
+
+.time{
+    height: 29px;
+    padding: 0;
+    margin: 0;
+}
+
+.timeHour{
+    position: relative;
+    left: 20px;
+}
+
+.day{
+    display: inline-block;
+    width: calc(100%/7 - 0.5px);
+    height: 100%;
+    margin: -2px;
+    border-left: 1px solid black;
+    background-color: rgba(181, 181, 181, 0.18);
+}
+
+.overlay{
+    position: absolute;
+    left: 12.5%;
+    top: 31px;
+    width: 87.5%;
+    height: calc(100% - 30px);
+}

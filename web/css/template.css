@@ -3,6 +3,7 @@ body{
 }
 .header{
     display: block;
+    position: fixed;
 }
 .logo{
     max-width: 80px;
@@ -22,24 +23,35 @@ body{
     position: relative;
     left: 20px;
     padding-bottom: 10px;
+    ;
+}
+
+a:link a:visited{
+
+    color: white;
+}
+
+li{
+    color: black;
 }
 .content{
     position: relative;
-    top: 100px;
+    top: 60px;
     width: 80%;
     display: block;
     background-color: white;
     margin: auto;
+    border: 1px solid black;
 }
 table {
     margin: auto;
     width: 100%;
+    border-bottom: 1px solid black;
     border-collapse: collapse;
-    border: 1px solid black;
 }
 
 table tr{
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.31);
     margin: -1px;
 }
 
@@ -58,6 +70,7 @@ table tr th{
 
 .timeHour{
     position: relative;
+    top: 15px;
     left: 20px;
 }
 
@@ -76,4 +89,17 @@ table tr th{
     top: 31px;
     width: 87.5%;
     height: calc(100% - 30px);
+}
+
+.timeElement{
+    position: absolute;
+    width: calc(100%/7 - 0.5px);
+    color: white;
+}
+
+.task{
+    background-color: rgba(255, 0, 0, 0.77);
+}
+
+.appointment{background-color: rgba(0, 0, 255, 0.77)
 }

@@ -5,14 +5,15 @@
     <link type="text/css" rel="stylesheet" href="css/template.css">
     <script src="script/jquery-3.2.1.min.js"></script>
     <script src="script/menu.js"></script>
+    <script src="script/Agenda.js"></script>
 </head>
 <body>
 <div class="header">
     <div class="menu">
         <img class="logo" src="css/images/logo/planet.png" attr="false" onclick="toggleMenu()">
         <div class="menuItem"><a href="index.jsp"><li>Home</li></a></div>
-        <div class="menuItem"><a href="index.jsp"><li>Home</li></a></div>
-        <div class="menuItem"><a href="index.jsp"><li>Home</li></a></div>
+        <div class="menuItem"><a href="index.jsp"><li>Taken</li></a></div>
+        <div class="menuItem"><a href="index.jsp"><li>Help</li></a></div>
     </div>
 </div>
 <div class="content">
@@ -28,22 +29,11 @@
                 <th>Zaterdag</th>
                 <th>Zondag</th>
             </tr>
-            <script>
-                for(var i = 0; i < 25; i++){
-                    var time;
-                    if(i < 10){
-                        time = "0" + i;
-                    }else{
-                        time = i;
-                    }
-                    $(".timeTable").append("<tr>" + "<td colspan='8' class='time'><div class='timehour'>" +  time + ":00 </div></td>" + "</tr>");
-                }
-                $(".timeTable").append();
-            </script>
+            <script>fillTable()</script>
         </table>
         <div class="overlay">
-            <div class="day"></div>
-            <div class="day"></div>
+            <div class="day" id="1"></div>
+            <div class="day" id="2"></div>
             <div class="day"></div>
             <div class="day"></div>
             <div class="day"></div>
@@ -52,6 +42,8 @@
         </div>
     </div>
 </div>
+<script>addTimeElement('{"id":"task1","type":"task","day":1,"timeB":"02:30","timeE":"08:00"}')</script>
+<script>addTimeElement('{"id":"task2","type":"appointment","day":2,"timeB":"06:00","timeE":"23:00"}')</script>
 </body>
 </html>
 

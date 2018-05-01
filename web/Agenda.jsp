@@ -16,18 +16,12 @@
         <div class="menuItem"><a href="index.jsp"><li>Help</li></a></div>
     </div>
 </div>
+_______________<input type="button" onclick="previousWeek()" value="previous">
+<input type="button" onclick="nextWeek()" value="next">
 <div class="content">
     <div class="Agenda">
         <table class="timeTable">
-            <tr>
-                <th>Time</th>
-                <th>Maandag</th>
-                <th>Dinsdag</th>
-                <th>Woensdag</th>
-                <th>Donderdag</th>
-                <th>Vrijdag</th>
-                <th>Zaterdag</th>
-                <th>Zondag</th>
+            <tr id="tableHeader">
             </tr>
             <script>fillTable()</script>
         </table>
@@ -43,7 +37,9 @@
     </div>
 </div>
 <script>addTimeElement('{"id":"task1","type":"task","day":1,"timeB":"02:30","timeE":"08:00"}')</script>
-<script>addTimeElement('{"id":"task2","type":"appointment","day":2,"timeB":"06:00","timeE":"23:00"}')</script>
+<script>addTimeElement('{"id":"task2","type":"appointment","day":1,"timeB":"10:00","timeE":"24:00"}')</script>
+<script>addTimeElement('{"id":"task3","type":"task","day":2,"timeB":"12:00","timeE":"14:00"}')</script>
+<script>addTimeElement('{"id":"task4","type":"task","day":2,"timeB":"14:30","timeE":"16:30"}')</script>
 </body>
 </html>
 

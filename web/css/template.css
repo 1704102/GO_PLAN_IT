@@ -96,7 +96,6 @@ table tr th{
     width: calc(100%/7 - 0.5px);
     color: white;
 }
-
 .task{
     background-color: rgba(255, 0, 0, 0.77);
 }

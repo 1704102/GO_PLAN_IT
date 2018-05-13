@@ -15,8 +15,8 @@ public class DatabaseHelper {
 
     public void connect(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/todds?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",USERNAME,PASSWORD);
+           Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/todds?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC",USERNAME,PASSWORD);
             System.out.println("connection succesfull");
         } catch (Exception e) {
             e.printStackTrace();

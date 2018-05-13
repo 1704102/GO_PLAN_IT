@@ -26,20 +26,20 @@ _______________<input type="button" onclick="previousWeek()" value="previous">
             <script>fillTable()</script>
         </table>
         <div class="overlay">
+            <div class="day" id="0"></div>
             <div class="day" id="1"></div>
             <div class="day" id="2"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
+            <div class="day" id="3"></div>
+            <div class="day" id="4"></div>
+            <div class="day" id="5"></div>
+            <div class="day" id="6"></div>
         </div>
     </div>
 </div>
-<script>addTimeElement('{"id":"task1","type":"task","day":1,"timeB":"02:30","timeE":"08:00"}')</script>
-<script>addTimeElement('{"id":"task2","type":"appointment","day":1,"timeB":"10:00","timeE":"24:00"}')</script>
-<script>addTimeElement('{"id":"task3","type":"task","day":2,"timeB":"12:00","timeE":"14:00"}')</script>
-<script>addTimeElement('{"id":"task4","type":"task","day":2,"timeB":"14:30","timeE":"16:30"}')</script>
+<%--<script>addTimeElement(JSON.parse('{"id":"task1","type":"task","day":1,"timeB":"20:30","timeE":"23:15"}'))</script>--%>
+<%--<script>addTimeElement('{"id":"task2","type":"appointment","day":1,"timeB":"10:00","timeE":"24:00"}')</script>--%>
+<%--<script>addTimeElement('{"id":"task3","type":"task","day":2,"timeB":"12:15","timeE":"14:00"}')</script>--%>
+<%--<script>addTimeElement('{"id":"task4","type":"task","day":2,"timeB":"14:30","timeE":"16:30"}')</script>--%>
 </body>
 </html>
 

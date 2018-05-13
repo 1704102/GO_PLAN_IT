@@ -5,11 +5,21 @@ var DATE = new Date();
 function fillTable() {
     fillHours();
     fillHeader();
+    console.log(Math.round(DATE.getTime() / 1000));
+    $.ajax({
+        type: 'POST',
+        url: 'rest/agenda',
+        dataType: 'json',
+        contentType: 'application/json',
+        processData: true,
+        data: '{"date":' + DATE.getTime() + ',"timeOffset":"'+DATE.getTimezoneOffset().toString()+'"}',
+        success: function(data){
+            for (var day in data){
+                addTimeElement(data[day])
+            }
+        }
+    });
 
-    $.get("rest/agenda", function (data) {
-        console.log(data)
-    })
-    ;
 }
 
 function fillHours() {
@@ -47,13 +57,14 @@ function previousWeek() {
     fillHeader()
 }
 
-function addTimeElement(element){
-    var task = JSON.parse(element);
-    $("#" + task.day).append("<div class='timeElement " + task.type +"' id='"+ task.id +"'>"+ task.name +"</div>");
+function addTimeElement(task){
+    console.log(task);
+    $("#" + task.day).append("<div class='timeElement " + task.type +"' id='tE-"+ task.id +"'>"+ task.name +"</div>");
     positionTask(task);
 }
 
 function positionTask(task){
+    console.log(task);
     var splitTimeB = task.timeB.split(":");
     var splitTimeE = task.timeE.split(":");
 
@@ -62,6 +73,9 @@ function positionTask(task){
     var top = minutesFromZeroB * (28.850/60);
     var height = (minutesFromZeroE - minutesFromZeroB) * (29.250/60);
 
-    $("#" + task.id).css("height", height + "px");
-    $("#" + task.id).css("top", top + "px");
+    console.log(height);
+    console.log(top);
+
+    $("#tE-" + task.id).css("height", height + "px");
+    $("#tE-" + task.id).css("top", top + "px");
 }

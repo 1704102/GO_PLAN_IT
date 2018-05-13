@@ -1,17 +1,19 @@
 package com.example.jersey.Database;
 
-import com.mysql.cj.xdevapi.JsonArray;
-import com.mysql.cj.xdevapi.JsonValue;
+import com.example.jersey.Controller.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 public class TimeElementDatabase extends DatabaseHelper{
 
-    public JSONArray getTimeElements(){
+    public JSONArray getTimeElements(JSONObject input){
+        Calendar calendar = Util.createCalender(input.getLong("date"));
+        System.out.println(calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
         JSONArray array = new JSONArray();
         connect();
         try {
@@ -22,17 +24,16 @@ public class TimeElementDatabase extends DatabaseHelper{
                 JSONObject object = new JSONObject();
                 object.put("id", s.getString("a.id"));
                 object.put("name", s.getString("b.name"));
-                object.put("timeB", s.getString("a.timeB"));
-                object.put("timeE", s.getString("a.timeE"));
+                object.put("timeB", Util.getTime(s.getTime("a.timeB"), input.getString("timeOffset")));
+                object.put("timeE", Util.getTime(s.getTime("a.timeE"), input.getString("timeOffset")));
+                object.put("day", Util.getDay(s.getTimestamp("a.timeB")));
                 if(s.getString("a.task_id") != null){
                     object.put("type", "task");
                 }else{
                     object.put("type", "appointment");
                 }
-                System.out.println(object.toString());
                 array.put(object);
             }
-            System.out.println(array.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

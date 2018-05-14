@@ -49,7 +49,7 @@
                             "<td>" + task.description + "</td>" +
                             "<td>" + task.date + " " + task.time + "</td>" +
                             "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
-                            "<td><img src='css/images/button/remove.png' width='20' height='20'></td>" +
+                            "<td><img class='delete' src='css/images/button/remove.png' width='20' height='20'></td>" +
                             "</tr>");
                     }
                 }
@@ -75,7 +75,7 @@
                             "<td>" + appointment.timeB + "</td>" +
                             "<td>" + appointment.timeE + "</td>" +
                             "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
-                            "<td><img src='css/images/button/remove.png' width='20' height='20'></td>" +
+                            "<td><img class='delete' src='css/images/button/remove.png' onclick='deleteAppointment(" + JSON.stringify(appointment) + ")' width='20' height='20'></td>" +
                             "</tr>");
                     }
                 }
@@ -93,7 +93,6 @@
                         contentType: 'application/json',
                         data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
                         success: function(data){
-                            console.log(data);
                             fillTaskTable(JSON.parse(data));
                         }
                     });
@@ -112,10 +111,48 @@
                         contentType: 'application/json',
                         data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
                         success: function(data){
-                            console.log(data);
                             fillAppointmentTable(JSON.parse(data));
                         }
                     });
+                }
+
+                function deleteTask(data) {
+                    console.log(data);
+                }
+
+
+                function sleep(milliseconds) {
+                    var start = new Date().getTime();
+                    for (var i = 0; i < 1e7; i++) {
+                        if ((new Date().getTime() - start) > milliseconds){
+                            break;
+                        }
+                    }
+                }
+
+
+                function deleteAppointment(appointment) {
+                    if (confirm("Are you sure?")) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: 'rest/appointment',
+                            dataType: 'text',
+                            contentType: 'application/json',
+                            data: '{"id":"'+ appointment.id +'"}'
+                        });
+                        sleep(500);
+                        $.ajax({
+                            type: 'POST',
+                            url: 'rest/appointment/all',
+                            dataType: 'text',
+                            contentType: 'application/json',
+                            data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
+                            success: function(data){
+                                fillAppointmentTable(JSON.parse(data));
+                            }
+                        });
+                        console.log("done");
+                    }
                 }
             </script>
         </div>

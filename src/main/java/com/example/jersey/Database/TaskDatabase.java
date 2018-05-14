@@ -24,7 +24,6 @@ public class TaskDatabase extends DatabaseHelper {
                 object.put("description", s.getString("description"));
                 object.put("date", s.getDate("deadline"));
                 object.put("time", s.getTime("deadline"));
-                System.out.println(object.toString());
                 array.put(object);
             }
         }catch (Exception e){

@@ -17,6 +17,14 @@ public class Appointment {
         appointmentDatabase.addAppointment(appointment);
     }
 
+    @DELETE
+    @Consumes("application/json")
+    public void deleteAppointment(String x) {
+        JSONObject input = new JSONObject(x);
+        AppointmentDatabase appointmentDatabase = new AppointmentDatabase();
+        appointmentDatabase.deleteAppointment(input.getInt("id"));
+    }
+
     @Path("/all")
     @POST
     @Consumes("application/json")

@@ -11,8 +11,8 @@
     <div class="menu">
         <img class="logo" src="css/images/logo/planet.png" attr="false" onclick="toggleMenu()">
         <div class="menuItem"><a href="index.jsp"><li>Home</li></a></div>
-        <div class="menuItem"><a href="index.jsp"><li>Home</li></a></div>
-        <div class="menuItem"><a href="index.jsp"><li>Home</li></a></div>
+        <div class="menuItem"><a href="tasks&appointments.jsp"><li>Taken</li></a></div>
+        <div class="menuItem"><a href="agenda.jsp"><li>Agenda</li></a></div>
     </div>
     <div class="content">
         Dit is text

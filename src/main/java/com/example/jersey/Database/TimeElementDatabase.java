@@ -1,5 +1,6 @@
 package com.example.jersey.Database;
 
+import com.example.jersey.Controller.Controller;
 import com.example.jersey.Controller.Util;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,26 +13,41 @@ import java.util.Calendar;
 public class TimeElementDatabase extends DatabaseHelper{
 
     public JSONArray getTimeElements(JSONObject input){
-        Calendar calendar = Util.createCalender(input.getLong("date"));
-        System.out.println(calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH));
+        Calendar dayStart = Util.createCalender(input.getLong("date"));
+        Calendar dayEnd = Calendar.getInstance();
+        dayEnd.setTime(dayStart.getTime());
+        dayEnd.add(Calendar.DAY_OF_MONTH , 7);
+
+        String dateStart = Util.DateToString(dayStart);
+        String dateEnd = Util.DateToString(dayEnd);
+
         JSONArray array = new JSONArray();
+
+        getTasks(array,dateStart,dateEnd,input.getString("token"), input.getString("timeOffset"));
+        getAppointmentsOnDate(array,dateStart,dateEnd,input.getString("token"), input.getString("timeOffset"));
+        getAppointmentsOnRepeat(array,dateStart,dateEnd,input.getString("token"), input.getString("timeOffset"));
+
+        return array;
+    }
+
+    public JSONArray getTasks(JSONArray array, String timeB, String timeE, String token, String timeOffset){
         connect();
         try {
-            PreparedStatement statement = connection.prepareStatement("select * from time_element as a left join task as b on a.task_id = b.id");
+            PreparedStatement statement = connection.prepareStatement("select * from time_element as a left join task as b on a.task_id = b.id where a.timeB BETWEEN STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(?, '%d-%m-%Y') and user_id = ?");
+            statement.setString(1,timeB);
+            statement.setString(2,timeE);
+            statement.setInt(3, Controller.getUser(token).getId());
             ResultSet s = statement.executeQuery();
 
             while (s.next()){
                 JSONObject object = new JSONObject();
                 object.put("id", s.getString("a.id"));
-                object.put("name", s.getString("b.name"));
-                object.put("timeB", Util.getTime(s.getTime("a.timeB"), input.getString("timeOffset")));
-                object.put("timeE", Util.getTime(s.getTime("a.timeE"), input.getString("timeOffset")));
-                object.put("day", Util.getDay(s.getTimestamp("a.timeB")));
-                if(s.getString("a.task_id") != null){
-                    object.put("type", "task");
-                }else{
-                    object.put("type", "appointment");
-                }
+                object.put("name", s.getString("name"));
+                object.put("timeB", Util.getTime(s.getTime("timeB"),timeOffset));
+                object.put("timeE", Util.getTime(s.getTime("timeE"), timeOffset));
+                object.put("day", Util.getDay(s.getTimestamp("timeB")));
+                object.put("type", "task");
+                System.out.println(object.toString());
                 array.put(object);
             }
         } catch (SQLException e) {
@@ -41,5 +57,59 @@ public class TimeElementDatabase extends DatabaseHelper{
         return array;
     }
 
+    public JSONArray getAppointmentsOnDate(JSONArray array, String timeB, String timeE, String token, String timeOffset){
+        connect();
+        try {
+            PreparedStatement statement = connection.prepareStatement("select * from appointment where date BETWEEN STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(?, '%d-%m-%Y') and user_id = ?");
+            statement.setString(1,timeB);
+            statement.setString(2,timeE);
+            statement.setInt(3, Controller.getUser(token).getId());
+            ResultSet s = statement.executeQuery();
+
+            while (s.next()){
+                JSONObject object = new JSONObject();
+                object.put("id", s.getString("id"));
+                object.put("name", s.getString("name"));
+                object.put("timeB", Util.getTime(s.getTime("timeB"), timeOffset));
+                object.put("timeE",Util.getTime(s.getTime("timeE"), timeOffset));
+                object.put("day", Util.getDay(s.getTimestamp("date")));
+                object.put("type", "appointment");
+                System.out.println(object.toString());
+                array.put(object);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        disconnect();;
+        return array;
+    }
+
+    public JSONArray getAppointmentsOnRepeat(JSONArray array, String timeB, String timeE, String token, String timeOffset){
+        connect();
+        try {
+            PreparedStatement statement = connection.prepareStatement("select * from appointment where repeating != \"\" and user_id = ?");
+            statement.setInt(1, Controller.getUser(token).getId());
+            ResultSet s = statement.executeQuery();
+
+            while (s.next()){
+                String[] days = s.getString("repeating").split(",");
+                for(String day: days){
+                    JSONObject object = new JSONObject();
+                    object.put("id", s.getString("id"));
+                    object.put("name", s.getString("name"));
+                    object.put("timeB", Util.getTime(s.getTime("timeB"), timeOffset));
+                    object.put("timeE",Util.getTime(s.getTime("timeE"), timeOffset));
+                    object.put("day", Util.dayToInt(day));
+                    object.put("type", "appointment");
+                    System.out.println(object.toString());
+                    array.put(object);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        disconnect();;
+        return array;
+    }
 
 }

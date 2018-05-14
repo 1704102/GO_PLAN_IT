@@ -10,12 +10,6 @@
 </head>
 <body>
 <div class="header">
-    <div class="menu">
-        <img class="logo" src="css/images/logo/planet.png" attr="false" onclick="toggleMenu()">
-        <div class="menuItem"><a href="index.jsp"><li>Home</li></a></div>
-        <div class="menuItem"><a href="index.jsp"><li>Taken</li></a></div>
-        <div class="menuItem"><a href="index.jsp"><li>Help</li></a></div>
-    </div>
 </div>
 <div class="content">
     <div id="loginMenu">
@@ -42,6 +36,7 @@
                         $("#password").css("border", "1px solid red");
                         $("#error").css("display", "block");
                     }else{
+                        sessionStorage.setItem("token", data);
                         window.location.href = '/agenda.jsp';
                     }
                 }

@@ -9,7 +9,6 @@ import java.util.Random;
 public class Util {
 
     public static Calendar createCalender(long x){
-        System.out.println(x);
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(x));
         System.out.println(c.getTime().toString());
@@ -50,8 +49,30 @@ public class Util {
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
+        return salt.toString();
+    }
+
+    public static String DateToString(Calendar calendar){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(calendar.get(Calendar.DAY_OF_MONTH));
+        stringBuilder.append("-");
+        stringBuilder.append(calendar.get(Calendar.MONTH) + 1);
+        stringBuilder.append("-");
+        stringBuilder.append(calendar.get(Calendar.YEAR));
+        return stringBuilder.toString();
+    }
+
+    public static int dayToInt(String day){
+        switch (day){
+            case "Monday":return 0;
+            case "Tuesday":return 1;
+            case "Wednesday":return 2;
+            case "Thursday":return 3;
+            case "Friday":return 4;
+            case "Saturday":return 5;
+            case "Sunday":return 6;
+            default: return 0;
+        }
     }
 
 

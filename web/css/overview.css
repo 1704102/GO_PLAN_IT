@@ -1,0 +1,30 @@
+.day{
+    background-color: deepskyblue;
+    border: 1px solid blue;
+    margin: 2px;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+}
+
+.day div{
+    position: relative;
+    top: 6px;
+    color: white;
+    text-align: center;
+}
+.day:hover{
+    cursor: pointer;
+}
+
+.day[foo = "true"]{
+    background-color: blue;
+}
+
+#repeating{
+    display: block;
+}
+
+#notRepeating{
+    display: none;
+}

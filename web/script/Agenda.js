@@ -5,23 +5,25 @@ var DATE = new Date();
 function fillTable() {
     fillHours();
     fillHeader();
-    console.log(Math.round(DATE.getTime() / 1000));
+    fillDays();
+
+}
+
+function fillDays() {
     $.ajax({
         type: 'POST',
         url: 'rest/agenda',
         dataType: 'json',
         contentType: 'application/json',
         processData: true,
-        data: '{"date":' + DATE.getTime() + ',"timeOffset":"'+DATE.getTimezoneOffset().toString()+'"}',
+        data: '{"date":' + DATE.getTime() + ',"timeOffset":"'+DATE.getTimezoneOffset().toString()+'", "token": "' + sessionStorage.getItem("token") + '"}',
         success: function(data){
             for (var day in data){
                 addTimeElement(data[day])
             }
         }
     });
-
 }
-
 function fillHours() {
     for(var i = 1; i < 24; i++){
         var time;
@@ -39,7 +41,6 @@ function fillHeader() {
     $("#tableHeader").empty()
     $("#tableHeader").append("<th>Time</th>");
     DATE.setDate(DATE.getDate() - DATE.getDay() + 1);
-    console.log(DATE);
     for(var i = 0; i < 7; i++){
         $("#tableHeader").append("<th>" + DAYSOFWEEK[DATE.getDay()] + " " + (DATE.getDate()) + "</th>")
         DATE.setDate(DATE.getDate() + 1);
@@ -50,21 +51,33 @@ function fillHeader() {
 function nextWeek() {
     DATE.setDate(DATE.getDate() + 7);
     fillHeader()
+    emptyDays()
+    fillDays();
 }
 
 function previousWeek() {
     DATE.setDate(DATE.getDate() - 7);
     fillHeader()
+    emptyDays()
+    fillDays();
+}
+
+function emptyDays() {
+    $("#0").empty();
+    $("#1").empty();
+    $("#2").empty();
+    $("#3").empty();
+    $("#4").empty();
+    $("#5").empty();
+    $("#6").empty();
 }
 
 function addTimeElement(task){
-    console.log(task);
-    $("#" + task.day).append("<div class='timeElement " + task.type +"' id='tE-"+ task.id +"'>"+ task.name +"</div>");
+    $("#" + task.day).append("<div class='timeElement "+ task.type + " tE-"+ task.id +"'>"+ task.name +"</div>");
     positionTask(task);
 }
 
 function positionTask(task){
-    console.log(task);
     var splitTimeB = task.timeB.split(":");
     var splitTimeE = task.timeE.split(":");
 
@@ -73,9 +86,8 @@ function positionTask(task){
     var top = minutesFromZeroB * (28.850/60);
     var height = (minutesFromZeroE - minutesFromZeroB) * (29.250/60);
 
-    console.log(height);
-    console.log(top);
-
-    $("#tE-" + task.id).css("height", height + "px");
-    $("#tE-" + task.id).css("top", top + "px");
+    $(".tE-" + task.id).each(function () {
+        $(this).css("height", height + "px");
+        $(this).css("top", top + "px");
+    })
 }

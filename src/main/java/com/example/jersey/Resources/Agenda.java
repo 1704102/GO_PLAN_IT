@@ -10,7 +10,7 @@ import javax.ws.rs.*;
 import java.util.Calendar;
 
 @Path("/agenda")
-public class HelloWorld {
+public class Agenda {
 
 //    @POST
 //    @Consumes("application/json")
@@ -27,7 +27,9 @@ public class HelloWorld {
     @Produces("application/json")
     public String getTimeElements(String x){
         JSONObject object = new JSONObject(x);
-        TimeElementDatabase d = new TimeElementDatabase();
-        return d.getTimeElements(object).toString();
+        if (!object.getString("token").equals("null")) {
+            TimeElementDatabase d = new TimeElementDatabase();
+            return d.getTimeElements(object).toString();
+        }else return "";
     }
 }

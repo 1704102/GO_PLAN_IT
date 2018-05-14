@@ -16,7 +16,7 @@ public class Controller {
         users.add(user);
     }
 
-    public User getUser(String token){
+    public static User getUser(String token){
         for (int i = 0; i < users.size(); i++){
             if (users.get(i).getToken().equals(token)){
                 return users.get(i);

@@ -25,6 +25,49 @@
     display: block;
 }
 
+#addAppointment{
+    display: none;
+}
+
 #notRepeating{
     display: none;
+}
+
+#overview{
+    width: 100%;
+}
+
+#overviewMenu{
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+#overviewMenu div{
+    display: inline-block;
+    width: calc(100%/2);
+    text-align: center;
+}
+
+#overviewMenu div:hover{
+    background-color: #727272;
+    cursor: pointer;
+}
+#overviewMenu div[selectedDiv = "true"]{
+    background-color: #979797;
+}
+#overviewMenu div[selectedDiv = "true"]:hover{
+    background-color: #727272;
+    cursor: pointer;
+}
+
+#overviewTable{
+    border-bottom: 1px solid black;
+}
+
+table{
+    width: 100%;
+}
+
+tr * {
+    text-align: center;
 }

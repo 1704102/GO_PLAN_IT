@@ -19,7 +19,107 @@
     </div>
 </div>
 <div class="content">
-    <div id="overview"></div>
+    <div id="overview">
+        <div id="overviewMenu">
+            <div id="taskSelect" selectedDiv="true" onclick="selectTasks()">tasks</div><div id="appointmentSelect" selectdDiv="false" onclick="selectAppointment()">appointments</div>
+        </div>
+        <div id="overviewTable">
+            <table id="taskTable"></table>
+            <table id="appointmentTable"></table>
+            <script>
+                selectTasks()
+
+
+                function fillTaskTable(data) {
+                    $("#taskTable").empty();
+                    $("#taskTable").append(
+                        "<tr>" +
+                        "<th>name</th>" +
+                        "<th>description</th>" +
+                        "<th>deadline</th>" +
+                        "<th>edit</th>" +
+                        "<th>remove</th>");
+                    + "</tr>"
+                    for(var i in data){
+                        var task = data[i];
+                        $("#taskTable").append(
+                            "<tr>" +
+                            "<td style='display: none'>" + task.id + "</td>" +
+                            "<td>" + task.name + "</td>" +
+                            "<td>" + task.description + "</td>" +
+                            "<td>" + task.date + " " + task.time + "</td>" +
+                            "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
+                            "<td><img src='css/images/button/remove.png' width='20' height='20'></td>" +
+                            "</tr>");
+                    }
+                }
+
+                function fillAppointmentTable(data) {
+                    $("#appointmentTable").empty();
+                    $("#appointmentTable").append(
+                        "<tr>" +
+                        "<th>name</th>" +
+                        "<th>date</th>" +
+                        "<th>timeB</th>" +
+                        "<th>timeE</th>" +
+                        "<th>edit</th>" +
+                        "<th>remove</th>"
+                    + "</tr>");
+                    for(var i in data){
+                        var appointment = data[i];
+                        $("#appointmentTable").append(
+                            "<tr>" +
+                            "<td style='display: none'>" + appointment.id + "</td>" +
+                            "<td>" + appointment.name + "</td>" +
+                            "<td>" + appointment.date + "</td>" +
+                            "<td>" + appointment.timeB + "</td>" +
+                            "<td>" + appointment.timeE + "</td>" +
+                            "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
+                            "<td><img src='css/images/button/remove.png' width='20' height='20'></td>" +
+                            "</tr>");
+                    }
+                }
+
+                function selectTasks() {
+                    $("#taskTable").css("display", "table");
+                    $("#taskSelect").attr("selectedDiv", "true");
+                    $("#appointmentTable").css("display", "none")
+                    $("#appointmentSelect").attr("selectedDiv", "false");
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'rest/task',
+                        dataType: 'text',
+                        contentType: 'application/json',
+                        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
+                        success: function(data){
+                            console.log(data);
+                            fillTaskTable(JSON.parse(data));
+                        }
+                    });
+                }
+
+                function selectAppointment() {
+                    $("#taskTable").css("display", "none");
+                    $("#taskSelect").attr("selectedDiv", "false");
+                    $("#appointmentTable").css("display", "table")
+                    $("#appointmentSelect").attr("selectedDiv", "true");
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'rest/appointment/all',
+                        dataType: 'text',
+                        contentType: 'application/json',
+                        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
+                        success: function(data){
+                            console.log(data);
+                            fillAppointmentTable(JSON.parse(data));
+                        }
+                    });
+                }
+            </script>
+        </div>
+    </div>
     <div id="addTask"></div>
     <div id="addAppointment">
         <div id="appointmentInput">

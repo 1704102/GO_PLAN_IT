@@ -7,7 +7,7 @@
     <script src="script/jquery-3.2.1.min.js"></script>
     <script src="script/appointment.js"></script>
     <script src="script/menu.js"></script>
-    <script src="script/Agenda.js"></script>
+    <script src="script/overview.js"></script>
 </head>
 <body>
 <div class="header">
@@ -24,173 +24,73 @@
             <div id="taskSelect" selectedDiv="true" onclick="selectTasks()">tasks</div><div id="appointmentSelect" selectdDiv="false" onclick="selectAppointment()">appointments</div>
         </div>
         <div id="overviewTable">
-            <table id="taskTable"></table>
-            <table id="appointmentTable"></table>
+
+            <div id="taskTableContainer">
+                <div><img src="css/images/button/edit.jpg" onclick="openAddTask()" width="30px" height="30px"></div>
+                <table id="taskTable"></table>
+            </div>
+
+            <div id="appointmentTableContainer" style="width: 100%;">
+                <div><img src="css/images/button/edit.jpg" onclick="openAddAppointment()" width="30px" height="30px"></div>
+                <table id="appointmentTable"></table>
+            </div>
             <script>
                 selectTasks()
-
-
-                function fillTaskTable(data) {
-                    $("#taskTable").empty();
-                    $("#taskTable").append(
-                        "<tr>" +
-                        "<th>name</th>" +
-                        "<th>description</th>" +
-                        "<th>deadline</th>" +
-                        "<th>edit</th>" +
-                        "<th>remove</th>");
-                    + "</tr>"
-                    for(var i in data){
-                        var task = data[i];
-                        $("#taskTable").append(
-                            "<tr>" +
-                            "<td style='display: none'>" + task.id + "</td>" +
-                            "<td>" + task.name + "</td>" +
-                            "<td>" + task.description + "</td>" +
-                            "<td>" + task.date + " " + task.time + "</td>" +
-                            "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
-                            "<td><img class='delete' src='css/images/button/remove.png' width='20' height='20'></td>" +
-                            "</tr>");
-                    }
-                }
-
-                function fillAppointmentTable(data) {
-                    $("#appointmentTable").empty();
-                    $("#appointmentTable").append(
-                        "<tr>" +
-                        "<th>name</th>" +
-                        "<th>date</th>" +
-                        "<th>timeB</th>" +
-                        "<th>timeE</th>" +
-                        "<th>edit</th>" +
-                        "<th>remove</th>"
-                    + "</tr>");
-                    for(var i in data){
-                        var appointment = data[i];
-                        $("#appointmentTable").append(
-                            "<tr>" +
-                            "<td style='display: none'>" + appointment.id + "</td>" +
-                            "<td>" + appointment.name + "</td>" +
-                            "<td>" + appointment.date + "</td>" +
-                            "<td>" + appointment.timeB + "</td>" +
-                            "<td>" + appointment.timeE + "</td>" +
-                            "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
-                            "<td><img class='delete' src='css/images/button/remove.png' onclick='deleteAppointment(" + JSON.stringify(appointment) + ")' width='20' height='20'></td>" +
-                            "</tr>");
-                    }
-                }
-
-                function selectTasks() {
-                    $("#taskTable").css("display", "table");
-                    $("#taskSelect").attr("selectedDiv", "true");
-                    $("#appointmentTable").css("display", "none")
-                    $("#appointmentSelect").attr("selectedDiv", "false");
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'rest/task',
-                        dataType: 'text',
-                        contentType: 'application/json',
-                        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-                        success: function(data){
-                            fillTaskTable(JSON.parse(data));
-                        }
-                    });
-                }
-
-                function selectAppointment() {
-                    $("#taskTable").css("display", "none");
-                    $("#taskSelect").attr("selectedDiv", "false");
-                    $("#appointmentTable").css("display", "table")
-                    $("#appointmentSelect").attr("selectedDiv", "true");
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'rest/appointment/all',
-                        dataType: 'text',
-                        contentType: 'application/json',
-                        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-                        success: function(data){
-                            fillAppointmentTable(JSON.parse(data));
-                        }
-                    });
-                }
-
-                function deleteTask(data) {
-                    console.log(data);
-                }
-
-
-                function sleep(milliseconds) {
-                    var start = new Date().getTime();
-                    for (var i = 0; i < 1e7; i++) {
-                        if ((new Date().getTime() - start) > milliseconds){
-                            break;
-                        }
-                    }
-                }
-
-
-                function deleteAppointment(appointment) {
-                    if (confirm("Are you sure?")) {
-                        $.ajax({
-                            type: 'DELETE',
-                            url: 'rest/appointment',
-                            dataType: 'text',
-                            contentType: 'application/json',
-                            data: '{"id":"'+ appointment.id +'"}'
-                        });
-                        sleep(500);
-                        $.ajax({
-                            type: 'POST',
-                            url: 'rest/appointment/all',
-                            dataType: 'text',
-                            contentType: 'application/json',
-                            data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-                            success: function(data){
-                                fillAppointmentTable(JSON.parse(data));
-                            }
-                        });
-                        console.log("done");
-                    }
-                }
             </script>
         </div>
     </div>
-    <div id="addTask"></div>
-    <div id="addAppointment">
-        <div id="appointmentInput">
-            <div>
-                <div>Name</div>
-                <div><input id="name" type="text"></div>
-            </div>
-            <div>
-                <div>timeB</div>
-                <div><input id="timeB" type="time"></div>
-            </div>
-            <div>
-                <div>timeE</div>
-                <div><input id="timeE" type="time"></div>
-            </div>
-            <input id="checkbox" type="checkbox" onchange="toggleRepeating()" value="repeating" checked>
-            <div id="notRepeating">
-                date<input id="date" type="date">
-            </div>
-            <div id="repeating">
-                <div>
-                    <div class="day" id="Monday" foo="false" onclick="toggleDay(this)"><div>M</div></div>
-                    <div class="day" id="Tuesday" foo="false" onclick="toggleDay(this)"><div>T</div></div>
-                    <div class="day" id="Wednesday" foo="false" onclick="toggleDay(this)"><div>W</div></div>
-                    <div class="day" id="Thursday" foo="false" onclick="toggleDay(this)"><div>T</div></div>
-                    <div class="day" id="Friday" foo="false" onclick="toggleDay(this)"><div>F</div></div>
-                    <div class="day" id="Saturday" foo="false" onclick="toggleDay(this)"><div>S</div></div>
-                    <div class="day" id="Sunday" foo="false" onclick="toggleDay(this)"><div>S</div></div>
-                </div>
-            </div>
-            <input type="button" value="send" onclick="addAppointment()">
 
-
+</div>
+<div id="addAppointment" class="overlay">
+    <div id="appointmentInput" class="inputContainer">
+        <div style="border-bottom: 1px solid black; text-align: center; font-size: 30px;">Appointment   <img src="css/images/button/remove.png" width="30px" height="30px;" onclick="closeAddAppointmnt()"></div>
+        <div class="input">
+            <div>Name</div>
+            <div><input type="text" id="appointment-name"></div>
         </div>
+        <div class="input">
+            <div>timeB</div>
+            <div><input id="appointment-timeB" type="time"></div>
+        </div>
+        <div class="input">
+            <div>timeE</div>
+            <div><input id="appointment-timeE" type="time"></div>
+        </div>
+        <div id="checkbox" onclick="toggleRepeating()">check</div>
+        <div id="notRepeating">
+            date<input id="appointment-date" type="date">
+        </div>
+        <div id="repeating">
+            <div>
+                <div class="day" id="Monday" foo="false" onclick="toggleDay(this)"><div>M</div></div>
+                <div class="day" id="Tuesday" foo="false" onclick="toggleDay(this)"><div>T</div></div>
+                <div class="day" id="Wednesday" foo="false" onclick="toggleDay(this)"><div>W</div></div>
+                <div class="day" id="Thursday" foo="false" onclick="toggleDay(this)"><div>T</div></div>
+                <div class="day" id="Friday" foo="false" onclick="toggleDay(this)"><div>F</div></div>
+                <div class="day" id="Saturday" foo="false" onclick="toggleDay(this)"><div>S</div></div>
+                <div class="day" id="Sunday" foo="false" onclick="toggleDay(this)"><div>S</div></div>
+            </div>
+        </div>
+        <div class="button"><input id="sendAppointment" type="button" value="send" onclick="addAppointment()"></div>
+    </div>
+</div>
+<div id="addTask" class="overlay">
+    <div id="addTaskInput" class="inputContainer">
+        <div style="border-bottom: 1px solid black; text-align: center; font-size: 30px;">Task   <img src="css/images/button/remove.png" width="30px" height="30px;" onclick="closeAddTask()"></div>
+        <div>
+            <div>name</div>
+            <input type="text" id="task-name">
+        </div>
+        <div>
+            <div>deadline</div>
+        </div>
+        <div>
+            <div>Date</div>
+            <input type="date" id="task-date">
+            <div>Time</div>
+            <input type="time" id="task-time">
+        </div>
+        <div><input type="button" value="add" onclick="addTask()"></div>
     </div>
 </div>
 <script>

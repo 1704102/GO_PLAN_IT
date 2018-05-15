@@ -33,4 +33,18 @@ public class TaskDatabase extends DatabaseHelper {
 
         return array;
     }
+
+    public void addTasks(JSONObject input) {
+        connect();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("insert into task (name,deadline,user_id) VALues (?,STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'),?)");
+            preparedStatement.setString(1,input.getString("name"));
+            preparedStatement.setString(2, input.getString("date") + " " + input.getString("time"));
+            preparedStatement.setInt(3, Controller.getUser(input.getString("token")).getId());
+            preparedStatement.execute();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        disconnect();
+    }
 }

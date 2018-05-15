@@ -8,7 +8,7 @@ function toggleDay(data) {
 }
 
 function toggleRepeating() {
-    if($("#checkbox").is(":checked")){
+    if($("#repeating").css("display") == "none"){
         $("#repeating").css("display", "block");
         $("#notRepeating").css("display", "none");
         $("#date").val("");
@@ -17,26 +17,6 @@ function toggleRepeating() {
         $("#notRepeating").css("display", "block");
         resetRepeating()
     }
-}
-
-function addAppointment() {
-    var data = JSON.parse("{}");
-    data["name"] = $("#name").val();
-    data["token"] = sessionStorage.getItem("token");
-    data["timeB"] = $("#timeB").val();
-    data["timeE"] = $("#timeE").val();
-    data["date"] = $("#date").val();
-    data["repeating"] = getRepeating();
-    console.log(data);
-    console.log(JSON.stringify(data));
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/appointment',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(data){
-        }
-    });
 }
 
 function getRepeating() {
@@ -56,4 +36,19 @@ function resetRepeating() {
             $(this).attr("foo", "false");
         }
     });
+}
+
+function closeAddAppointmnt() {
+    $("#addAppointment").css("display", "none")
+}
+
+function openAddAppointment() {
+    $("#addAppointment").css("display", "block")
+}
+function closeAddTask() {
+    $("#addTask").css("display", "none")
+}
+
+function openAddTask() {
+    $("#addTask").css("display", "block")
 }

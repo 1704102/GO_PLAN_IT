@@ -26,6 +26,7 @@ public class Util {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         String hour = String.valueOf(date.getHours() + ((Integer.parseInt(offset) - date.getTimezoneOffset()) / 60));
+        if (hour.equals("-1")) hour = "23";
         String minutes = String.valueOf(date.getMinutes());
         if(minutes.equals("0")){
             minutes = "00";

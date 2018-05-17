@@ -33,7 +33,7 @@ public class TimeElementDatabase extends DatabaseHelper{
     public JSONArray getTasks(JSONArray array, String timeB, String timeE, String token, String timeOffset){
         connect();
         try {
-            PreparedStatement statement = connection.prepareStatement("select * from time_element as a left join task as b on a.task_id = b.id where a.timeB BETWEEN STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(?, '%d-%m-%Y') and user_id = ?");
+            PreparedStatement statement = connection.prepareStatement("select * from time_element as a left join subtask as b on a.subtask_id = b.id left join task as c on b.task_id = c.id where a.timeB BETWEEN STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(?, '%d-%m-%Y') and c.user_id = ?");
             statement.setString(1,timeB);
             statement.setString(2,timeE);
             statement.setInt(3, Controller.getUser(token).getId());
@@ -71,6 +71,7 @@ public class TimeElementDatabase extends DatabaseHelper{
                 object.put("id", s.getString("id"));
                 object.put("name", s.getString("name"));
                 object.put("timeB", Util.getTime(s.getTime("timeB"), timeOffset));
+                System.out.println(s.getTime("timeE"));
                 object.put("timeE",Util.getTime(s.getTime("timeE"), timeOffset));
                 object.put("day", Util.getDay(s.getTimestamp("date")));
                 object.put("type", "appointment");

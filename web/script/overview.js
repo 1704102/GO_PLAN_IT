@@ -1,24 +1,15 @@
 function fillTaskTable(data) {
     $("#taskTable").empty();
-    $("#taskTable").append(
-        "<tr>" +
-        "<th>name</th>" +
-        "<th>description</th>" +
-        "<th>deadline</th>" +
-        "<th>edit</th>" +
-        "<th>remove</th>");
-    + "</tr>"
+    $("#taskTable").append("  <div class=\"task\"><img src=\"css/images/button/add.png\" onclick=\"openAddTask()\" width=50px  height=50px></div>");
     for(var i in data){
         var task = data[i];
+        var i = task.id;
         $("#taskTable").append(
-            "<tr>" +
-            "<td style='display: none'>" + task.id + "</td>" +
-            "<td>" + task.name + "</td>" +
-            "<td>" + task.description + "</td>" +
-            "<td>" + task.date + " " + task.time + "</td>" +
-            "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
-            "<td><img class='delete' src='css/images/button/remove.png' width='20' height='20'></td>" +
-            "</tr>");
+            "<div class='task' onclick='openTask(" + i + ")'>" +
+            "<div style='display: table'>" + task.name + "</div>" +
+            "<div class='hidden'>" + task.id + "</div>" +
+            "</div>");
+
     }
 }
 
@@ -127,8 +118,6 @@ function addAppointment() {
     data["timeE"] = $("#appointment-timeE").val();
     data["date"] = $("#appointment-date").val();
     data["repeating"] = getRepeating();
-    console.log(data);
-    console.log(JSON.stringify(data));
     $.ajax({
         type: 'PUT',
         url: 'rest/appointment',
@@ -143,15 +132,16 @@ function addAppointment() {
 
 function addTask() {
     var data = JSON.parse("{}");
+    data["id"] = $("#task-id").text();
     data["name"] = $("#task-name").val();
     data["token"] = sessionStorage.getItem("token");
+    data["description"] = "empty";
     data["date"] = $("#task-date").val();
     data["time"] = $("#task-time").val();
-    console.log(data);
-    console.log(JSON.stringify(data));
+
     $.ajax({
-        type: 'PUT',
-        url: 'rest/task',
+        type: 'POST',
+        url: 'rest/task/data',
         data: JSON.stringify(data),
         contentType: 'application/json',
         success: function(data){

@@ -38,7 +38,7 @@ public class AppointmentDatabase extends DatabaseHelper{
 
         connect();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("select * , DATE_FORMAT(timeB, \"%H:%i\") as `timeBAltered` , DATE_FORMAT(timeE, \"%H:%i\") as `timeEAltered` from appointment where user_id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("select * , DATE_FORMAT(timeB, '%H:%i') as `timeBAltered` , DATE_FORMAT(timeE, '%H:%i') as `timeEAltered` from appointment where user_id = ?");
             preparedStatement.setInt(1,Controller.getUser(input.getString("token")).getId());
             ResultSet s = preparedStatement.executeQuery();
             while (s.next()){
@@ -47,6 +47,8 @@ public class AppointmentDatabase extends DatabaseHelper{
                 object.put("name", s.getString("name"));
                 object.put("date", s.getDate("date"));
                 object.put("timeB", s.getString("timeBAltered"));
+                System.out.println("test");
+                System.out.println(s.getString("timeEAltered"));
                 object.put("timeE", s.getString("timeEAltered"));
                 array.put(object);
             }

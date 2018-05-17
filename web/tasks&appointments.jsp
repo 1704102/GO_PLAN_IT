@@ -26,8 +26,8 @@
         <div id="overviewTable">
 
             <div id="taskTableContainer">
-                <div><img src="css/images/button/edit.jpg" onclick="openAddTask()" width="30px" height="30px"></div>
-                <table id="taskTable"></table>
+                <div id="taskTable">
+                </div>
             </div>
 
             <div id="appointmentTableContainer" style="width: 100%;">
@@ -77,6 +77,7 @@
 <div id="addTask" class="overlay">
     <div id="addTaskInput" class="inputContainer">
         <div style="border-bottom: 1px solid black; text-align: center; font-size: 30px;">Task   <img src="css/images/button/remove.png" width="30px" height="30px;" onclick="closeAddTask()"></div>
+        <div id="task-id" style="display: none"></div>
         <div>
             <div>name</div>
             <input type="text" id="task-name">

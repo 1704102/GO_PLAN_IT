@@ -12,7 +12,7 @@ public class Task {
     @POST
     @Consumes("application/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getTask(String x){
+    public String getTasks(String x){
         JSONObject input = new JSONObject(x);
         TaskDatabase taskDatabase = new TaskDatabase();
         return taskDatabase.getTasks(input).toString();
@@ -21,10 +21,30 @@ public class Task {
     @PUT
     @Consumes("application/json")
     @Produces(MediaType.APPLICATION_JSON)
-    public void addTask(String x){
+    public String addTask(String x){
+        JSONObject input = new JSONObject(x);
+        TaskDatabase taskDatabase = new TaskDatabase();
+        return String.valueOf(taskDatabase.addTasks(input));
+    }
+
+    @Path("/data")
+    @POST
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void saveTask(String x){
+        JSONObject input = new JSONObject(x);
+        TaskDatabase taskDatabase = new TaskDatabase();
+        taskDatabase.saveFullTask(input);
+    }
+
+    @Path("/one")
+    @POST
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getTask(String x){
         System.out.println(x);
         JSONObject input = new JSONObject(x);
         TaskDatabase taskDatabase = new TaskDatabase();
-        taskDatabase.addTasks(input);
+        return taskDatabase.getTask(input).toString();
     }
 }

@@ -73,20 +73,31 @@ function emptyDays() {
 }
 
 function addTimeElement(task){
-    $("#" + task.day).append("<div class='timeElement "+ task.type + " tE-"+ task.id +"'>"+ task.name +"</div>");
-    positionTask(task);
+    var preId = "";
+    if (task.type == "task"){
+        preId = "tE-";
+    }else {
+        preId = "aE-"
+    }
+    $("#" + task.day).append("<div class='timeElement "+ task.type + " " + preId + task.id + "'>"+ task.name +"</div>");
+    positionTask(task, preId);
 }
 
-function positionTask(task){
+function positionTask(task, preId){
+    console.log(task);
     var splitTimeB = task.timeB.split(":");
     var splitTimeE = task.timeE.split(":");
 
+    console.log(splitTimeB);
+    console.log(splitTimeE);
+
     var minutesFromZeroB = (parseInt(splitTimeB[0]) * 60) + (parseInt(splitTimeB[1]));
     var minutesFromZeroE = (parseInt(splitTimeE[0]) * 60) + (parseInt(splitTimeE[1]));
+
     var top = minutesFromZeroB * (28.850/60);
     var height = (minutesFromZeroE - minutesFromZeroB) * (29.250/60);
 
-    $(".tE-" + task.id).each(function () {
+    $("."+ preId + task.id).each(function () {
         $(this).css("height", height + "px");
         $(this).css("top", top + "px");
     })

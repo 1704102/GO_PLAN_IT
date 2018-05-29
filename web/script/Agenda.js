@@ -46,6 +46,9 @@ function fillHeader() {
         DATE.setDate(DATE.getDate() + 1);
     }
     DATE.setDate(DATE.getDate() - 7);
+
+    $("#month-year").empty();
+    $("#month-year").append(MONTHSOFYEAR[DATE.getMonth()] + " " + DATE.getFullYear());
 }
 
 function nextWeek() {

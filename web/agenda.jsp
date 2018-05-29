@@ -16,10 +16,14 @@
         <div class="menuItem"><a href="agenda.jsp"><li>Agenda</li></a></div>
     </div>
 </div>
-_______________<input type="button" onclick="previousWeek()" value="previous">
-<input type="button" onclick="nextWeek()" value="next">
+
 <div class="content">
     <div class="Agenda">
+        <div id="utilHeader">
+            <input type="button" onclick="previousWeek()" value="previous">
+            <div id="month-year"></div>
+            <input type="button" onclick="nextWeek()" value="next">
+        </div>
         <table class="timeTable">
             <tr id="tableHeader">
             </tr>
@@ -36,10 +40,6 @@ _______________<input type="button" onclick="previousWeek()" value="previous">
         </div>
     </div>
 </div>
-<%--<script>addTimeElement(JSON.parse('{"id":"task1","type":"task","day":1,"timeB":"20:30","timeE":"23:15"}'))</script>--%>
-<%--<script>addTimeElement('{"id":"task2","type":"appointment","day":1,"timeB":"10:00","timeE":"24:00"}')</script>--%>
-<%--<script>addTimeElement('{"id":"task3","type":"task","day":2,"timeB":"12:15","timeE":"14:00"}')</script>--%>
-<%--<script>addTimeElement('{"id":"task4","type":"task","day":2,"timeB":"14:30","timeE":"16:30"}')</script>--%>
 </body>
 </html>
 

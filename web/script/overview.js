@@ -13,31 +13,6 @@ function fillTaskTable(data) {
     }
 }
 
-function getAppointments() {
-    $.ajax({
-        type: 'POST',
-        url: 'rest/appointment/all',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-        success: function(data){
-            fillAppointmentTable(JSON.parse(data));
-        }
-    });
-}
-
-function getTasks() {
-    $.ajax({
-        type: 'POST',
-        url: 'rest/task',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-        success: function(data){
-            fillTaskTable(JSON.parse(data));
-        }
-    });
-}
 
 function fillAppointmentTable(data) {
     $("#appointmentTable").empty();
@@ -90,62 +65,85 @@ function sleep(milliseconds) {
         }
     }
 }
-function deleteTask(data) {
-    console.log(data);
-}
 
 
-function deleteAppointment(appointment) {
-    if (confirm("Are you sure?")) {
-        $.ajax({
-            type: 'DELETE',
-            url: 'rest/appointment',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: '{"id":"'+ appointment.id +'"}'
-        });
-        sleep(500);
-        getAppointments();
+function toggleDay(data) {
+    if($(data).attr("foo") == "false") {
+        $(data).attr("foo", "true");
+    }else{
+        $(data).attr("foo", "false");
     }
 }
 
-
-function addAppointment() {
-    var data = JSON.parse("{}");
-    data["name"] = $("#appointment-name").val();
-    data["token"] = sessionStorage.getItem("token");
-    data["timeB"] = $("#appointment-timeB").val();
-    data["timeE"] = $("#appointment-timeE").val();
-    data["date"] = $("#appointment-date").val();
-    data["repeating"] = getRepeating();
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/appointment',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(data){
-        }
-    });
-    sleep(1000);
-    getAppointments();
+function toggleRepeating() {
+    if($("#repeating").css("display") == "none"){
+        $("#repeating").css("display", "block");
+        $("#notRepeating").css("display", "none");
+        $("#date").val("");
+    }else {
+        $("#repeating").css("display", "none");
+        $("#notRepeating").css("display", "block");
+        resetRepeating()
+    }
 }
 
-function addTask() {
-    var data = JSON.parse("{}");
-    data["id"] = $("#task-id").text();
-    data["name"] = $("#task-name").val();
-    data["token"] = sessionStorage.getItem("token");
-    data["description"] = "empty";
-    data["date"] = $("#task-date").val();
-    data["time"] = $("#task-time").val();
+function getRepeating() {
+    var s = "";
+    $(".day").each(function () {
+        if($(this).attr("foo") == "true"){
+            s += $(this).attr("id") + ",";
+        }
+    });
+    s = s.substring(0, s.length - 1);
+    return s;
+}
 
+function resetRepeating() {
+    $(".day").each(function () {
+        if($(this).attr("foo") == "true"){
+            $(this).attr("foo", "false");
+        }
+    });
+}
+
+function closeAddAppointmnt() {
+    $("#addAppointment").css("display", "none")
+}
+
+function openAddAppointment() {
+    $("#addAppointment").css("display", "block")
+}
+function closeAddTask() {
+    $("#addTask").css("display", "none");
+    if ($("#task-name").val() == ""){
+        deleteCheckTask();
+    }
+    sleep(200);
+    getTasks();
+}
+
+function openAddTask() {
+    var data = JSON.parse("{}");
+    data["token"] = sessionStorage.getItem("token");
     $.ajax({
         type: 'POST',
-        url: 'rest/task/data',
+        url: 'rest/task',
         data: JSON.stringify(data),
         contentType: 'application/json',
         success: function(data){
+            $("#task-id").append(data);
+            openTask(data);
         }
     });
-    getTasks();
+}
+
+function addSubTask() {
+    $("#subTasks").append(
+        "<tr class='subTask'>" +
+        "<td><input class='name' type='text'></td>" +
+        "<td><input class='hours' type='text'></td>" +
+        "<td><input class='done' type='checkbox'></td>" +
+        "<td><img src=\"css/images/button/trash.jpg\" width='25px' height='25px'></td>" +
+        "</tr>"
+    );
 }

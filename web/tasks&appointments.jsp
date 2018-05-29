@@ -7,6 +7,8 @@
     <script src="script/jquery-3.2.1.min.js"></script>
     <script src="script/appointment.js"></script>
     <script src="script/menu.js"></script>
+    <script src="script/appointment.js"></script>
+    <script src="script/task.js"></script>
     <script src="script/overview.js"></script>
 </head>
 <body>
@@ -76,7 +78,7 @@
 </div>
 <div id="addTask" class="overlay">
     <div id="addTaskInput" class="inputContainer">
-        <div style="border-bottom: 1px solid black; text-align: center; font-size: 30px;">Task   <img src="css/images/button/remove.png" width="30px" height="30px;" onclick="closeAddTask()"></div>
+        <div style="display: inline-block;border-bottom: 1px solid black; text-align: center; font-size: 30px;">Task   <img src="css/images/button/remove.png" width="30px" height="30px;" onclick="closeAddTask()"><img src="css/images/button/trash.jpg" width="30px" height="30px;" onclick="deleteTask(); closeAddTask()"></div>
         <div id="task-id" style="display: none"></div>
         <div>
             <div>name</div>
@@ -91,11 +93,26 @@
             <div>Time</div>
             <input type="time" id="task-time">
         </div>
-        <div><input type="button" value="add" onclick="addTask()"></div>
+        <div id="subTaskContainer">
+            <table id="subTasks">
+                <tr>
+                    <th>name</th>
+                    <th>hours</th>
+                    <th>done</th>
+                    <th>remove</th>
+                </tr>
+                <tr class='subTask'>
+                    <td><input class="name" type="text"></td>
+                    <td><input class="hours" type="text"></td>
+                    <td><input class="done" type="checkbox"></td>
+                    <td><img src="css/images/button/trash.jpg" width='25px' height='25px'></td>
+                </tr>
+            </table>
+            <div><img src="css/images/button/add.png" width="20px" height="20px" alt="add" onclick="addSubTask()"></div>
+        </div>
+        <div><input type="button" value="add" onclick="saveTask()"></div>
     </div>
 </div>
-<script>
-</script>
 </body>
 </html>
 

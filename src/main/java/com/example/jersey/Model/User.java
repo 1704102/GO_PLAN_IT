@@ -4,6 +4,7 @@ public class User {
 
     int id;
     String token;
+    int sessionTime;
 
     public User(int id, String token) {
         this.id = id;
@@ -12,6 +13,14 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public int getSessionTime() {
+        return sessionTime;
+    }
+
+    public void setSessionTime(int sessionTime) {
+        this.sessionTime = sessionTime;
     }
 
     public String getToken() {

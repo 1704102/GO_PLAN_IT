@@ -11,8 +11,28 @@
 <body>
 <div class="header">
 </div>
+<script>
+    if (sessionStorage.getItem("token") != undefined){
+        $.ajax({
+            type: 'POST',
+            url: 'rest/login/check',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: '{"token":"' + sessionStorage.getItem("token") + '"}',
+            success: function(data){
+                console.log(data);
+                if(data == "true"){
+                    window.location.href = '/agenda.jsp';
+                }else{
+                    sessionStorage.removeItem("token");
+                }
+            }
+        });
+    }
+</script>
 <div class="content">
     <div id="loginMenu">
+        <div style="margin: auto; width: 160px;"><img src="css/images/logo/planet.png" width="150px" height="150px"></div>
         <div id="loginInput">
             <div><div>Username</div><input id="username" type="text"></div>
             <div><div>Password</div><input id="password" type="password"></div>

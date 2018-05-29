@@ -13,7 +13,13 @@ import java.util.ArrayList;
 @Path("/login")
 public class Login {
 
-    Controller controller = new Controller();
+    public static Controller controller;
+
+    public Login(){
+        if (controller == null){
+            controller = new Controller();
+        }
+    }
 
     @POST
     @Consumes("application/json")
@@ -32,4 +38,20 @@ public class Login {
         }
     }
 
+    @Path("/check")
+    @POST
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String loginCheck(String login){
+        JSONObject object = new JSONObject(login);
+        User user = Controller.getUser(object.getString("token"));
+        if (user != null){
+            System.out.println("true");
+            return "true";
+        }else{
+            System.out.println("false");
+            return "false";
+        }
+
+    }
 }

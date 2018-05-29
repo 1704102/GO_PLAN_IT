@@ -2,6 +2,8 @@ package com.example.jersey.Controller;
 
 import com.example.jersey.Model.User;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Controller {
@@ -10,6 +12,7 @@ public class Controller {
 
     public Controller(){
         users = new ArrayList<>();
+        runApplication();
     }
 
     public static void addUser(User user){
@@ -23,6 +26,25 @@ public class Controller {
             }
         }
         return null;
+    }
+
+    public void runApplication(){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                for (int i = 0; i < users.size(); i++){
+                    System.out.println(users.get(i).getSessionTime());
+                    if (users.get(i).getSessionTime() == 14){
+                        users.remove(i);
+                        System.out.println("removed user");
+                    }else{
+                        users.get(i).setSessionTime(users.get(i).getSessionTime() + 1);
+                    }
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(task,0,(1000 * 60));
     }
 
 

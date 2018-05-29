@@ -28,8 +28,15 @@ public class Util {
         String hour = String.valueOf(date.getHours() + ((Integer.parseInt(offset) - date.getTimezoneOffset()) / 60));
         if (hour.equals("-1")) hour = "23";
         String minutes = String.valueOf(date.getMinutes());
-        if(minutes.equals("0")){
-            minutes = "00";
+        if(Integer.parseInt(minutes) < 10){
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("0" + minutes);
+            minutes = stringBuilder.toString();
+        }
+        if(Integer.parseInt(hour) < 10){
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("0" + hour);
+            hour = stringBuilder.toString();
         }
         return hour + ":" + minutes;
     }

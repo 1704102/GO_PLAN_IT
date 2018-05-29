@@ -6,8 +6,12 @@ body{
     position: fixed;
 }
 .logo{
-    max-width: 80px;
+    position: relative;
+    top: 10px;
+    display: block;
+    width:80px;
     height: auto;
+    margin: auto;
 }
 .logo:hover{
     cursor: pointer;
@@ -16,7 +20,8 @@ body{
     position: absolute;
     background-color: white;
     border-radius: 50%;
-    width: 80px;
+    width: 100px;
+    height: 80px;
 }
 .menuItem{
     display: none;
@@ -97,7 +102,26 @@ table tr th{
     color: white;
 }
 .task{
-    background-color: rgba(255, 0, 0, 0.77);
+    background-color: rgb(255, 0, 0);
+}
+
+#tableHeader th{
+    background-color: rgb(181, 181, 181);
+}
+
+#utilHeader{
+    width: 100%;background-color: rgb(181, 181, 181); display: block; border-bottom: 1px solid black
+}
+
+#utilHeader input{
+    display: inline-block;
+    width: 9%;
+}
+
+#utilHeader div{
+    display: inline-block;
+     width: 81.1%;
+    text-align: center;
 }
 
 .appointment{background-color: rgba(0, 0, 255, 0.77)

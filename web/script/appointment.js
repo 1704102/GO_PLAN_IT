@@ -1,86 +1,46 @@
-function toggleDay(data) {
-    if($(data).attr("foo") == "false") {
-        $(data).attr("foo", "true");
-    }else{
-        $(data).attr("foo", "false");
-    }
-}
-
-function toggleRepeating() {
-    if($("#repeating").css("display") == "none"){
-        $("#repeating").css("display", "block");
-        $("#notRepeating").css("display", "none");
-        $("#date").val("");
-    }else {
-        $("#repeating").css("display", "none");
-        $("#notRepeating").css("display", "block");
-        resetRepeating()
-    }
-}
-
-function getRepeating() {
-    var s = "";
-    $(".day").each(function () {
-        if($(this).attr("foo") == "true"){
-            s += $(this).attr("id") + ",";
-        }
-    });
-    s = s.substring(0, s.length - 1);
-    return s;
-}
-
-function resetRepeating() {
-    $(".day").each(function () {
-        if($(this).attr("foo") == "true"){
-            $(this).attr("foo", "false");
-        }
-    });
-}
-
-function closeAddAppointmnt() {
-    $("#addAppointment").css("display", "none")
-}
-
-function openAddAppointment() {
-    $("#addAppointment").css("display", "block")
-}
-function closeAddTask() {
-    $("#addTask").css("display", "none")
-    getTasks();
-}
-
-function openAddTask() {
-    var data = JSON.parse("{}");
-    data["token"] = sessionStorage.getItem("token");
+function getAppointments() {
     $.ajax({
         type: 'PUT',
-        url: 'rest/task',
-        data: JSON.stringify(data),
+        url: 'rest/appointments',
+        dataType: 'text',
         contentType: 'application/json',
+        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
         success: function(data){
-            $("#task-id").append(data);
-            openTask(data);
+            fillAppointmentTable(JSON.parse(data));
         }
     });
+}
 
-
-
-}function openTask(id) {
-    $("#addTask").css("display", "block")
+function addAppointment() {
     var data = JSON.parse("{}");
-    data["id"] = id;
+    data["name"] = $("#appointment-name").val();
+    data["token"] = sessionStorage.getItem("token");
+    data["timeB"] = $("#appointment-timeB").val();
+    data["timeE"] = $("#appointment-timeE").val();
+    data["date"] = $("#appointment-date").val();
+    data["repeating"] = getRepeating();
     $.ajax({
         type: 'POST',
-        url: 'rest/task/one',
+        url: 'rest/appointment',
         data: JSON.stringify(data),
         contentType: 'application/json',
         success: function(data){
-            console.log(data[0]);
-            $("#task-id").empty();
-            $("#task-id").append(id);
-            $("#task-name").val(data[0].name);
-            $("#task-date").val(data[0].date);
-            $("#task-time").val(data[0].time);
         }
     });
+    sleep(1000);
+    getAppointments();
+}
+
+function deleteAppointment(appointment) {
+    if (confirm("Are you sure?")) {
+        $.ajax({
+            type: 'DELETE',
+            url: 'rest/appointment',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: '{"id":"'+ appointment.id +'"}'
+        });
+        sleep(500);
+        getAppointments();
+    }
 }

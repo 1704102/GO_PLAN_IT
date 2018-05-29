@@ -9,7 +9,7 @@ public class Day {
     private Date date;
     Calendar c = Calendar.getInstance();
     public Day(Date d, boolean lastDays){
-
+        date = d;
         if(lastDays==true) {
             addscore(10);
         }

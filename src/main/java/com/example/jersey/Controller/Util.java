@@ -11,7 +11,6 @@ public class Util {
     public static Calendar createCalender(long x){
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(x));
-        System.out.println(c.getTime().toString());
         return c;
     }
 

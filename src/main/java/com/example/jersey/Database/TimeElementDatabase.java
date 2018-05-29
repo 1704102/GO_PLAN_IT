@@ -47,7 +47,6 @@ public class TimeElementDatabase extends DatabaseHelper{
                 object.put("timeE", Util.getTime(s.getTime("timeE"), timeOffset));
                 object.put("day", Util.getDay(s.getTimestamp("timeB")));
                 object.put("type", "task");
-                System.out.println(object.toString());
                 array.put(object);
             }
         } catch (SQLException e) {
@@ -71,12 +70,10 @@ public class TimeElementDatabase extends DatabaseHelper{
                 object.put("id", s.getString("id"));
                 object.put("name", s.getString("name"));
                 object.put("timeB", Util.getTime(s.getTime("timeB"), timeOffset));
-                System.out.println(s.getTime("timeE"));
                 object.put("timeE",Util.getTime(s.getTime("timeE"), timeOffset));
                 object.put("day", Util.getDay(s.getTimestamp("date")));
                 object.put("type", "appointment");
                 object.put("date", s.getDate("date"));
-                System.out.println(object.toString());
                 array.put(object);
             }
         } catch (SQLException e) {
@@ -103,7 +100,6 @@ public class TimeElementDatabase extends DatabaseHelper{
                     object.put("timeE",Util.getTime(s.getTime("timeE"), timeOffset));
                     object.put("day", Util.dayToInt(day));
                     object.put("type", "appointment");
-                    System.out.println(object.toString());
                     array.put(object);
                 }
             }

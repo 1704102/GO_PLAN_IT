@@ -3,6 +3,7 @@ package com.example.jersey.Resources;
 import com.example.jersey.Controller.Util;
 import com.example.jersey.Database.DatabaseHelper;
 import com.example.jersey.Database.TimeElementDatabase;
+import com.example.jersey.TaskPlannerAdd.AddTask;
 import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONObject;
 
@@ -27,6 +28,11 @@ public class Agenda {
     @Produces("application/json")
     public String getTimeElements(String x){
         JSONObject object = new JSONObject(x);
+
+        AddTask task = new AddTask();
+        task.addAppointments(object, task.sortDays(20));
+
+
         if (!object.getString("token").equals("null")) {
             TimeElementDatabase d = new TimeElementDatabase();
             return d.getTimeElements(object).toString();

@@ -97,7 +97,7 @@ function positionTask(task, preId){
     var minutesFromZeroB = (parseInt(splitTimeB[0]) * 60) + (parseInt(splitTimeB[1]));
     var minutesFromZeroE = (parseInt(splitTimeE[0]) * 60) + (parseInt(splitTimeE[1]));
 
-    var top = minutesFromZeroB * (30  /60) - 6;
+    var top = minutesFromZeroB * (30  /60) - 5.5;
     var height = (minutesFromZeroE - minutesFromZeroB) * (30/60);
 
     $("."+ preId + task.id).each(function () {

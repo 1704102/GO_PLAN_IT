@@ -25,7 +25,7 @@ public class TimeElementDatabase extends DatabaseHelper{
 
         getTasks(array,dateStart,dateEnd,input.getString("token"), input.getString("timeOffset"));
         getAppointmentsOnDate(array,dateStart,dateEnd,input.getString("token"), input.getString("timeOffset"));
-        getAppointmentsOnRepeat(array,dateStart,dateEnd,input.getString("token"), input.getString("timeOffset"));
+        getAppointmentsOnRepeat(array,input.getString("token"), input.getString("timeOffset"));
 
         return array;
     }
@@ -75,6 +75,7 @@ public class TimeElementDatabase extends DatabaseHelper{
                 object.put("timeE",Util.getTime(s.getTime("timeE"), timeOffset));
                 object.put("day", Util.getDay(s.getTimestamp("date")));
                 object.put("type", "appointment");
+                object.put("date", s.getDate("date"));
                 System.out.println(object.toString());
                 array.put(object);
             }
@@ -85,7 +86,7 @@ public class TimeElementDatabase extends DatabaseHelper{
         return array;
     }
 
-    public JSONArray getAppointmentsOnRepeat(JSONArray array, String timeB, String timeE, String token, String timeOffset){
+    public JSONArray getAppointmentsOnRepeat(JSONArray array, String token, String timeOffset){
         connect();
         try {
             PreparedStatement statement = connection.prepareStatement("select * from appointment where repeating != \"\" and user_id = ?");

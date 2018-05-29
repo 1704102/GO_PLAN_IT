@@ -2,10 +2,13 @@ package com.example.jersey.TaskPlannerAdd;
 
 import com.example.jersey.Controller.Util;
 import com.example.jersey.Database.AppointmentDatabase;
+
+import com.example.jersey.Database.TimeElementDatabase;
 import com.example.jersey.Model.DateElements.Day;
 import jdk.nashorn.internal.parser.DateParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import sun.security.jca.GetInstance;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,7 +36,7 @@ public class AddTask {
         return Util.daysBetween(currentDate.getTime(), deadline.getTime());
     }
 
-    private List<Day> sortDays(int amountDays) {
+    public ArrayList<Day> sortDays(int amountDays) {
         ArrayList<Day> days = new ArrayList();
         Calendar calendar = Util.createCalender(Instant.now().toEpochMilli());
         for (int i = 0; i < amountDays; i++) {
@@ -45,20 +48,33 @@ public class AddTask {
         return days;
     }
 
-    private void addAppointments(JSONObject input, ArrayList<Day> days){
-        AppointmentDatabase appointmentDatabase = new AppointmentDatabase();
-        JSONArray ouput = appointmentDatabase.getAppointments(input);
-        for(int i = 0; i < ouput.length(); i++){
-            JSONObject appointment = ouput.getJSONObject(i);
+    public void addAppointments(JSONObject input, ArrayList<Day> days){
+        TimeElementDatabase timeElementDatabase = new TimeElementDatabase();
+        Date date2 = new Date(Instant.now().toEpochMilli() + (1000*60*60*24*364*50*100));
+        JSONArray output = timeElementDatabase.getAppointmentsOnDate(new JSONArray(), Util.DateToString(Util.createCalender(Instant.now().toEpochMilli())), Util.DateToString(Util.createCalender(date2.getTime())),input.getString("token"), input.getString("timeOffset"));
+        output = timeElementDatabase.getAppointmentsOnRepeat(output, input.getString("token"), input.getString("timeOffset"));
+        for(int i = 0; i < output.length(); i++) {
+            JSONObject appointment = output.getJSONObject(i);
             String timeB = appointment.getString("timeB");
             String timeE = appointment.getString("timeE");
-            String date = appointment.getString("date");
+            Date date = new Date(0);
+            int repeating = 0;
+            try {
+                date = (Date) appointment.get("date");
+            } catch (Exception e) {
+            }
+            try {
+                repeating = appointment.getInt("day");
+            }catch (Exception e){
 
-            Date date2 = new Date(Date.parse(date));
-
+            }
+            System.out.println("appointment");
+            System.out.println("*" + date.toString());
+            System.out.println("*" + repeating);
         }
 
-
-
     }
+
+
+
 }

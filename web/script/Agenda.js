@@ -32,17 +32,17 @@ function fillHours() {
         }else{
             time = i;
         }
-        $(".timeTable").append("<tr>" + "<td colspan='8' class='time'><div class='timehour'>" +  time + ":00 </div></td>" + "</tr>");
+        $(".timeTable").append("<div>" + "<div class='time'><div class='timehour'>" +  time + ":00 </div></div>" + "</div>");
     }
-    $(".timeTable").append("<tr>\" + \"<td colspan='8' class='time'></td>\" + \"</tr>" );
+    $(".timeTable").append("<div>" + "<div class='time'><div class='timehour'> </div></div>" + "</div>");
 }
 
 function fillHeader() {
     $("#tableHeader").empty()
-    $("#tableHeader").append("<th>Time</th>");
+    $("#tableHeader").append("<div>Time</div>");
     DATE.setDate(DATE.getDate() - DATE.getDay() + 1);
     for(var i = 0; i < 7; i++){
-        $("#tableHeader").append("<th>" + DAYSOFWEEK[DATE.getDay()] + " " + (DATE.getDate()) + "</th>")
+        $("#tableHeader").append("<div>" + DAYSOFWEEK[DATE.getDay()] + " " + (DATE.getDate()) + "</div>")
         DATE.setDate(DATE.getDate() + 1);
     }
     DATE.setDate(DATE.getDate() - 7);
@@ -97,8 +97,8 @@ function positionTask(task, preId){
     var minutesFromZeroB = (parseInt(splitTimeB[0]) * 60) + (parseInt(splitTimeB[1]));
     var minutesFromZeroE = (parseInt(splitTimeE[0]) * 60) + (parseInt(splitTimeE[1]));
 
-    var top = minutesFromZeroB * (28.850/60);
-    var height = (minutesFromZeroE - minutesFromZeroB) * (29.250/60);
+    var top = minutesFromZeroB * (30  /60) - 6;
+    var height = (minutesFromZeroE - minutesFromZeroB) * (30/60);
 
     $("."+ preId + task.id).each(function () {
         $(this).css("height", height + "px");

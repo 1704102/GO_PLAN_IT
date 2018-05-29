@@ -24,11 +24,10 @@
             <div id="month-year"></div>
             <input type="button" onclick="nextWeek()" value="next">
         </div>
-        <table class="timeTable">
-            <tr id="tableHeader">
-            </tr>
-            <script>fillTable()</script>
-        </table>
+        <div class="timeTable">
+            <div id="tableHeader">
+            </div><script>fillTable()</script>
+        </div>
         <div class="overlay">
             <div class="day" id="0"></div>
             <div class="day" id="1"></div>

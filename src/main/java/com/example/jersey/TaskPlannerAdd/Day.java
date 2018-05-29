@@ -5,7 +5,7 @@ public class Day {
     private int timeSpent=0;
     private int Dayscore=0;
     private ArrayList<Integer> Freehours= new ArrayList<Integer>();
-    private String date;
+    private String Date;
     public Day(){
 
     }

@@ -1,14 +1,13 @@
 package com.example.jersey.Resources;
 
-import com.example.jersey.Controller.Util;
-import com.example.jersey.Database.DatabaseHelper;
 import com.example.jersey.Database.TimeElementDatabase;
 import com.example.jersey.TaskPlannerAdd.AddTask;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONObject;
 
-import javax.ws.rs.*;
-import java.util.Calendar;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 @Path("/agenda")
 public class Agenda {
@@ -26,7 +25,7 @@ public class Agenda {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public String getTimeElements(String x){
+    public String getTimeElements(String x) {
         JSONObject object = new JSONObject(x);
 
         AddTask task = new AddTask();
@@ -36,6 +35,6 @@ public class Agenda {
         if (!object.getString("token").equals("null")) {
             TimeElementDatabase d = new TimeElementDatabase();
             return d.getTimeElements(object).toString();
-        }else return "";
+        } else return "";
     }
 }

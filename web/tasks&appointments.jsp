@@ -101,12 +101,7 @@
                     <th>done</th>
                     <th>remove</th>
                 </tr>
-                <tr class='subTask'>
-                    <td><input class="name" type="text"></td>
-                    <td><input class="hours" type="text"></td>
-                    <td><input class="done" type="checkbox"></td>
-                    <td><img src="css/images/button/trash.jpg" width='25px' height='25px'></td>
-                </tr>
+
             </table>
             <div><img src="css/images/button/add.png" width="20px" height="20px" alt="add" onclick="addSubTask()"></div>
         </div>

@@ -33,7 +33,7 @@ public class TimeElementDatabase extends DatabaseHelper{
     public JSONArray getTasks(JSONArray array, String timeB, String timeE, String token, String timeOffset){
         connect();
         try {
-            PreparedStatement statement = connection.prepareStatement("select * from time_element as a left join subtask as b on a.subtask_id = b.id left join task as c on b.task_id = c.id where a.timeB BETWEEN STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(?, '%d-%m-%Y') and c.user_id = ?");
+            PreparedStatement statement = connection.prepareStatement("select * from time_element as a left join subtask as b on a.subtask_id = b.id left join task as c on b.task_id = c.id where a.timeB BETWEEN STR_TO_DATE(?, '%Y-%m-%d') AND STR_TO_DATE(?, '%Y-%m-%d') and c.user_id = ?");
             statement.setString(1,timeB);
             statement.setString(2,timeE);
             statement.setInt(3, Controller.getUser(token).getId());
@@ -59,7 +59,7 @@ public class TimeElementDatabase extends DatabaseHelper{
     public JSONArray getAppointmentsOnDate(JSONArray array, String timeB, String timeE, String token, String timeOffset){
         connect();
         try {
-            PreparedStatement statement = connection.prepareStatement("select * from appointment where date BETWEEN STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(?, '%d-%m-%Y') and user_id = ?");
+            PreparedStatement statement = connection.prepareStatement("select * from appointment where date BETWEEN STR_TO_DATE(?, '%Y-%m-%d') AND STR_TO_DATE(?, '%Y-%m-%d') and user_id = ?");
             statement.setString(1,timeB);
             statement.setString(2,timeE);
             statement.setInt(3, Controller.getUser(token).getId());

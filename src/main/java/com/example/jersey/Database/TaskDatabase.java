@@ -2,7 +2,6 @@ package com.example.jersey.Database;
 
 import com.example.jersey.Controller.Controller;
 import com.example.jersey.Controller.Util;
-import com.mysql.cj.xdevapi.JsonArray;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -92,17 +91,19 @@ public class TaskDatabase extends DatabaseHelper {
         JSONArray array = new JSONArray();
         connect();
         try{
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from task where user_id = ?");
-            preparedStatement.setInt(1, Controller.getUser(input.getString("token")).getId());
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from task where id = ?");
+            preparedStatement.setInt(1, input.getInt("id"));
             ResultSet s = preparedStatement.executeQuery();
             while (s.next()){
                 JSONObject object = new JSONObject();
                 object.put("id", s.getInt("id"));
                 object.put("name", s.getString("name"));
                 object.put("description", s.getString("description"));
-                object.put("deadline", s.getDate("deadline"));
+                object.put("deadline", Util.DateToString(Util.createCalender(s.getDate("deadline").getTime())));
+                object.put("time", Util.getTime(s.getTime("deadline"), input.getString("timeOffset")));
 
-                array.put(object.put("tasks", getsubtasks(input, s.getInt("id"))));
+
+                array.put(object.put("tasks", getSubTasks(input, s.getInt("id"))));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -112,7 +113,7 @@ public class TaskDatabase extends DatabaseHelper {
         return array;
     }
 
-    public JSONArray getsubtasks(JSONObject input, int id){
+    public JSONArray getSubTasks(JSONObject input, int id){
         JSONArray output = new JSONArray();
         try{
             PreparedStatement preparedStatement1 = connection.prepareStatement("select * from subtask where task_id = ?");
@@ -138,8 +139,7 @@ public class TaskDatabase extends DatabaseHelper {
 
     public void saveFullTask(JSONObject input) {
         connect();
-        saveTask(input);
-        saveSubTasks(input);
+
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("delete from subtask where task_id = ?");
@@ -148,6 +148,8 @@ public class TaskDatabase extends DatabaseHelper {
         }catch (Exception e){
             e.printStackTrace();
         }
+        saveTask(input);
+        saveSubTasks(input);
         disconnect();
     }
 
@@ -155,11 +157,12 @@ public class TaskDatabase extends DatabaseHelper {
         try {
             JSONArray jsonArray = input.getJSONArray("subTasks");
             for(int i = 0; i < jsonArray.length(); i++) {
+                System.out.println(jsonArray.getJSONObject(i).toString());
                 JSONObject object = jsonArray.getJSONObject(i);
                 PreparedStatement preparedStatement = connection.prepareStatement("insert into subtask (name,  hours, done, task_id, skipped) values (?,?,?,?,0)");
                 preparedStatement.setString(1, object.getString("name"));
                 preparedStatement.setInt(2, Integer.parseInt(object.getString("hours")));
-                preparedStatement.setString(3, object.getString("done"));
+                preparedStatement.setBoolean(3, object.getBoolean("done1"));
                 preparedStatement.setInt(4, Integer.parseInt(input.getString("id")));
                 preparedStatement.execute();
             }

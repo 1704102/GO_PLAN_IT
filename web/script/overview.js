@@ -147,3 +147,20 @@ function addSubTask() {
         "</tr>"
     );
 }
+
+function addSubTaskWithData(data) {
+    console.log(data.done);
+    var checked = "";
+    if (data.done == true){
+        console.log("checked");
+        checked = "checked";
+    }
+    $("#subTasks").append(
+        "<tr class='subTask'>" +
+        "<td><input class='name' type='text' value='" + data.name + "'></td>" +
+        "<td><input class='hours' type='text' value='" + data.hours + "'></td>" +
+        "<td><input class='done' type='checkbox' " + checked + "></td>" +
+        "<td><img src=\"css/images/button/trash.jpg\" width='25px' height='25px'></td>" +
+        "</tr>"
+    );
+}

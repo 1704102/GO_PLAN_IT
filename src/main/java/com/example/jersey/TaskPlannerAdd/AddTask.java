@@ -68,9 +68,7 @@ public class AddTask {
             }catch (Exception e){
 
             }
-            System.out.println("appointment");
-            System.out.println("*" + date.toString());
-            System.out.println("*" + repeating);
+
         }
 
     }

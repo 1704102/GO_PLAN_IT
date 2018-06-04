@@ -1,5 +1,5 @@
 package com.example.jersey.TaskPlannerAdd;
-import com.example.jersey.Model.HoldingElement.*;
+import com.example.jersey.Model.HoldingElement.Taskblock;
 import com.example.jersey.Controller.Util;
 import com.example.jersey.Database.AppointmentDatabase;
 
@@ -19,8 +19,8 @@ import java.util.Random;
 
 public class AddTask {
     ArrayList<Day> days= new ArrayList();
-
-    public void addnewTask(Date startDate, Date end, int plannedhours) {
+    ArrayList<Taskblock>tasks= new ArrayList();
+    public void addnewTask(Date startDate, Date end, int plannedhours,String taskname) {
         // get all days starting from current day until due date of task,
         // and for all the days get the times of the activities on set day and
         // all the repeating tasks. then give the day a score(bonus points on weekend 1 point)
@@ -28,7 +28,7 @@ public class AddTask {
 
         // check if the amount of free time is enough to plan the task.
 
-        placeTask(days,plannedhours);
+        placeTask(days,plannedhours,taskname);
         // find the day with the least points
         // from the data base get the free time hours
         // place a time block there on a free time space.
@@ -45,7 +45,7 @@ public class AddTask {
 
         return days;
     }
-    public void placeTask(ArrayList Alldays, int plannedHours){
+    public void placeTask(ArrayList Alldays, int plannedHours,String taskname){
 
         int x =100000;
         for(Day d: days){
@@ -56,9 +56,9 @@ public class AddTask {
         //find optimal size
         //find optimal hours
         Day d = RandomDay(optimaldays);
-        makeTaskBlock(d);
+        makeTaskBlock(d, 0 , taskname);
         if(plannedHours>0){
-            placeTask(Alldays,plannedHours);
+            placeTask(Alldays,plannedHours,taskname);
 
         }
         else{
@@ -67,7 +67,15 @@ public class AddTask {
 
         }
     }
-    public void makeTaskBlock(Day d){
+    public void makeTaskBlock(Day d, int StartTime,String taskname){
+        Date date=d.getDate();
+        Date datetime1= date;
+        Date datetime2 = date;
+        datetime1.setHours(StartTime);
+        datetime2.setHours(StartTime+2);
+        Taskblock t = new Taskblock(datetime1,datetime2, taskname);
+        tasks.add(t);
+
 
     }
     public Day RandomDay(ArrayList<Day> e){

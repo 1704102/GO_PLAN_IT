@@ -1,5 +1,5 @@
 package com.example.jersey.TaskPlannerAdd;
-
+import com.example.jersey.Model.HoldingElement.*;
 import com.example.jersey.Controller.Util;
 import com.example.jersey.Database.AppointmentDatabase;
 
@@ -54,9 +54,13 @@ public class AddTask {
         }
         ArrayList<Day> optimaldays= getDaysWithScore(Alldays,x);
         int countdays =optimaldays.size();
-            
+        //find optimal size
+        //find optimal hours
+
+        Taskblock();
         if(plannedHours>0){
             placeTask(Alldays,plannedHours);
+
         }
 
     }

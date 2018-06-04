@@ -10,7 +10,7 @@ public class Taskblock {
     String subtask;
 
 
-    Taskblock(Date Start, Date End, String taskname){
+    public Taskblock(Date Start, Date End, String taskname){
 
     }
 

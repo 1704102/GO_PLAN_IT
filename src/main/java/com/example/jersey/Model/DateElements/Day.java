@@ -1,5 +1,7 @@
 package com.example.jersey.Model.DateElements;
 
+import com.example.jersey.Controller.Util;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -50,6 +52,10 @@ public class Day {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getDayscore() {
+        return dayscore;
     }
 }
 

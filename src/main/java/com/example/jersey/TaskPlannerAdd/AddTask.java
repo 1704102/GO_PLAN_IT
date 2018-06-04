@@ -15,11 +15,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class AddTask {
+    ArrayList<Day> days= new ArrayList();
 
-
-    public void AddnewTask(/*current date, deadline date*/) {
+    public void addnewTask(Date startDate, Date end, int plannedhours) {
         // get all days starting from current day until due date of task,
         // and for all the days get the times of the activities on set day and
         // all the repeating tasks. then give the day a score(bonus points on weekend 1 point)
@@ -27,11 +28,38 @@ public class AddTask {
 
         // check if the amount of free time is enough to plan the task.
 
+        placeTask(days,plannedhours);
         // find the day with the least points
         // from the data base get the free time hours
         // place a time block there on a free time space.
     }
 
+    public ArrayList<Day> getDaysWithScore(ArrayList<Day> e, int dayscore){
+        ArrayList<Day> days = new ArrayList<>();
+        for(Day day : e){
+            if(day.getDayscore()==dayscore){
+                days.add(day);
+            }
+
+        }
+
+        return days;
+    }
+    public void placeTask(ArrayList Alldays, int plannedHours){
+
+        int x =100000;
+        for(Day d: days){
+            if(d.getDayscore()>x);
+            x=d.getDayscore();
+        }
+        ArrayList<Day> optimaldays= getDaysWithScore(Alldays,x);
+        int countdays =optimaldays.size();
+            
+        if(plannedHours>0){
+            placeTask(Alldays,plannedHours);
+        }
+
+    }
     private int getDaysUntilDeadline(Calendar currentDate, Calendar deadline) {
         return Util.daysBetween(currentDate.getTime(), deadline.getTime());
     }

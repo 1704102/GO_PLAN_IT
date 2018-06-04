@@ -1,17 +1,18 @@
 package com.example.jersey.Model.HoldingElement;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Task {
 
     private String name;
-    private String deadline;
+    private Calendar deadline;
 
     private boolean finished;
 
     private ArrayList<SubTask> subTasks;
 
-    public Task(String name, String deadline, boolean finished, ArrayList<SubTask> subTasks) {
+    public Task(String name, Calendar deadline, boolean finished, ArrayList<SubTask> subTasks) {
         this.name = name;
         this.deadline = deadline;
         this.finished = finished;
@@ -34,11 +35,11 @@ public class Task {
         this.name = name;
     }
 
-    public String getDeadline() {
+    public Calendar getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(String deadline) {
+    public void setDeadline(Calendar deadline) {
         this.deadline = deadline;
     }
 

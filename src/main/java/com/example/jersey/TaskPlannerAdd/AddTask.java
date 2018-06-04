@@ -53,16 +53,28 @@ public class AddTask {
             x=d.getDayscore();
         }
         ArrayList<Day> optimaldays= getDaysWithScore(Alldays,x);
-        int countdays =optimaldays.size();
         //find optimal size
         //find optimal hours
-
-        Taskblock();
+        Day d = RandomDay(optimaldays);
+        makeTaskBlock(d);
         if(plannedHours>0){
             placeTask(Alldays,plannedHours);
 
         }
+        else{
+            //task database
+            return;
 
+        }
+    }
+    public void makeTaskBlock(Day d){
+
+    }
+    public Day RandomDay(ArrayList<Day> e){
+        int x =e.size();
+        Random rand = new Random();
+        int random = rand.nextInt(x);
+        return e.get(x);
     }
     private int getDaysUntilDeadline(Calendar currentDate, Calendar deadline) {
         return Util.daysBetween(currentDate.getTime(), deadline.getTime());

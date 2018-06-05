@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/appointment")
 public class Appointment {
 
-    @POST
+    @PUT
     @Consumes("application/json")
     public void addAppointment(String input) {
         JSONObject appointment = new JSONObject(input);

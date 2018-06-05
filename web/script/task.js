@@ -1,5 +1,6 @@
 function openTask(id) {
-    $("#addTask").css("display", "block")
+    $("#task-id").append(data);
+    $("#addTask").css("display", "block");
     var data = JSON.parse("{}");
     var date = new Date();
     data["id"] = id;
@@ -29,16 +30,9 @@ function openTask(id) {
 }
 
 function getTasks() {
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/tasks',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-        success: function(data){
-            fillTaskTable(JSON.parse(data));
-        }
-    });
+    var input = JSON.parse("{}");
+    input["token"] = sessionStorage.getItem("token");
+    fillTaskTable(postCall(input, 'rest/tasks', 'json'));
 }
 
 function saveTask() {
@@ -68,15 +62,16 @@ function saveTask() {
     data["subTasks"] = subtasks;
 
     console.log(data);
+        $.ajax({
+            type: 'PUT',
+            url: 'rest/task/data',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function(data){
+            }
+        });
 
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/task/data',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(data){
-        }
-    });
+
 }
 
 function deleteCheckTask() {

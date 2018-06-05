@@ -125,16 +125,7 @@ function closeAddTask() {
 function openAddTask() {
     var data = JSON.parse("{}");
     data["token"] = sessionStorage.getItem("token");
-    $.ajax({
-        type: 'POST',
-        url: 'rest/task',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(data){
-            $("#task-id").append(data);
-            openTask(data);
-        }
-    });
+    openTask(postCall(data, 'rest/task', 'text'));
 }
 
 function addSubTask() {

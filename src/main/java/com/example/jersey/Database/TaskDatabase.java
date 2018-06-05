@@ -99,10 +99,13 @@ public class TaskDatabase extends DatabaseHelper {
                 object.put("id", s.getInt("id"));
                 object.put("name", s.getString("name"));
                 object.put("description", s.getString("description"));
-                object.put("deadline", Util.DateToString(Util.createCalender(s.getDate("deadline").getTime())));
-                object.put("time", Util.getTime(s.getTime("deadline"), input.getString("timeOffset")));
-
-
+                if (s.getDate("deadline") != null){
+                    object.put("deadline", Util.DateToString(Util.createCalender(s.getDate("deadline").getTime())));
+                    object.put("time", Util.getTime(s.getTime("deadline"), input.getString("timeOffset")));
+                }else{
+                    object.put("deadline", "");
+                    object.put("time", "");
+                }
                 array.put(object.put("tasks", getSubTasks(input, s.getInt("id"))));
             }
         }catch (Exception e){

@@ -17,10 +17,11 @@ body{
     cursor: pointer;
 }
 .menu{
+    z-index: 1;
     position: absolute;
     background-color: white;
     border-radius: 50%;
-    width: 100px;
+    width: 80px;
     height: 80px;
 }
 .menuItem{
@@ -40,6 +41,7 @@ li{
     color: black;
 }
 .content{
+    z-index: 0;
     position: relative;
     top: 60px;
     width: 80%;

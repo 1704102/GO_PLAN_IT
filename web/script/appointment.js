@@ -1,14 +1,7 @@
 function getAppointments() {
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/appointments',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-        success: function(data){
-            fillAppointmentTable(JSON.parse(data));
-        }
-    });
+    var input = JSON.parse("{}");
+    input["token"] = sessionStorage.getItem("token");
+    fillAppointmentTable(postCall(input, 'rest/appointments', 'json'));
 }
 
 function addAppointment() {
@@ -19,27 +12,17 @@ function addAppointment() {
     data["timeE"] = $("#appointment-timeE").val();
     data["date"] = $("#appointment-date").val();
     data["repeating"] = getRepeating();
-    $.ajax({
-        type: 'POST',
-        url: 'rest/appointment',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(data){
-        }
-    });
+
+    putCall(data, 'rest/appointment');
     sleep(1000);
     getAppointments();
 }
 
 function deleteAppointment(appointment) {
     if (confirm("Are you sure?")) {
-        $.ajax({
-            type: 'DELETE',
-            url: 'rest/appointment',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: '{"id":"'+ appointment.id +'"}'
-        });
+        input = JSON.parse("{}");
+        input["id"] = appointment.id;
+        deleteCall(input, 'rest/appointment')
         sleep(500);
         getAppointments();
     }

@@ -1,5 +1,6 @@
 function openTask(id) {
-    $("#addTask").css("display", "block")
+    $("#task-id").append(data);
+    $("#addTask").css("display", "block");
     var data = JSON.parse("{}");
     var date = new Date();
     data["id"] = id;
@@ -10,27 +11,28 @@ function openTask(id) {
         data: JSON.stringify(data),
         contentType: 'application/json',
         success: function(data){
-            console.log(data);
+            var date = data[0].deadline;
+            console.log(data[0]);
             $("#task-id").empty();
             $("#task-id").append(id);
             $("#task-name").val(data[0].name);
-            $("#task-date").val(data[0].date);
+            $("#task-date").val(date);
             $("#task-time").val(data[0].time);
+            $("#subTasks").find(".subTask").remove();
+            if(data[0].tasks.length == 0){
+                addSubTask();
+            }
+            for(var subtask in data[0].tasks){
+                addSubTaskWithData(data[0].tasks[subtask]);
+            }
         }
     });
 }
 
 function getTasks() {
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/tasks',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: '{"token":"'+ sessionStorage.getItem("token") +'"}',
-        success: function(data){
-            fillTaskTable(JSON.parse(data));
-        }
-    });
+    var input = JSON.parse("{}");
+    input["token"] = sessionStorage.getItem("token");
+    fillTaskTable(postCall(input, 'rest/tasks', 'json'));
 }
 
 function saveTask() {
@@ -48,7 +50,11 @@ function saveTask() {
         var subTask = JSON.parse("{}");
         subTask["name"] = $(this).find(".name").val();
         subTask["hours"] = $(this).find(".hours").val();
-        subTask["done"] = $(this).find(".done").val();
+        if ($(this).find(".done").is(':checked')){
+            subTask["done1"] = true;
+        }else{
+            subTask["done1"] = false;
+        }
 
         subtasks.push(subTask);
     });
@@ -56,15 +62,16 @@ function saveTask() {
     data["subTasks"] = subtasks;
 
     console.log(data);
+        $.ajax({
+            type: 'PUT',
+            url: 'rest/task/data',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function(data){
+            }
+        });
 
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/task/data',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(data){
-        }
-    });
+
 }
 
 function deleteCheckTask() {

@@ -46,7 +46,6 @@ public class Login {
         JSONObject object = new JSONObject(login);
         User user = Controller.getUser(object.getString("token"));
         if (user != null){
-            System.out.println("true");
             return "true";
         }else{
             System.out.println("false");

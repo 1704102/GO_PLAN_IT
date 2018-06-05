@@ -5,6 +5,7 @@ import com.example.jersey.Controller.Util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Day {
     private int timeSpent = 0;
@@ -12,7 +13,10 @@ public class Day {
     private ArrayList<Integer> freehours = new ArrayList<Integer>();
     private Date date;
 
-    public Day(){
+    public Day(){}
+
+
+    public Day(Date date){
 
     }
 

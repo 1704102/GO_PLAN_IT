@@ -12,11 +12,12 @@ import java.time.Instant;
 import java.util.*;
 
 public class AddTask {
-    private ArrayList<Day> days = new ArrayList();
     private ArrayList<Taskblock> tasks = new ArrayList();
+    //ArrayList actitvities()
     private String today = Util.DateToString(Util.createCalender(Instant.now().toEpochMilli()));
 
     public void addnewTask(Date startDate, Date end, int plannedhours, String taskname) {
+        ArrayList<Day> days= listOfDays(startDate,end);
         /**
          // DONE (getDaysUntilDeadline): get all days starting from current day until due date of task,
          // DONE (addAppointments): and for all the days get the times of the activities on set day and
@@ -42,11 +43,23 @@ public class AddTask {
 
         return days;
     }
-
-    public void placeTask(ArrayList Alldays, int plannedHours, String taskname) {
+    public ArrayList<Day> listOfDays(Date start, Date end){
+        ArrayList<Day> makedays= new ArrayList();
+        Date daymaker=start;
+        while(!daymaker.equals(end)){
+            Day day = new Day(daymaker);
+            makedays.add(day);
+            Calendar c = Calendar.getInstance();
+            c.setTime(daymaker);
+            c.add(Calendar.DATE, 1);
+            daymaker = c.getTime();
+        }
+        return makedays;
+    }
+    public void placeTask(ArrayList<Day> Alldays, int plannedHours, String taskname) {
 
         int x = 100000;
-        for (Day d : days) {
+        for (Day d : Alldays) {
             if (d.getDayscore() > x) ;
             x = d.getDayscore();
         }
@@ -55,6 +68,7 @@ public class AddTask {
         //find optimal hours
         Day d = RandomDay(optimaldays);
         makeTaskBlock(d, 0, taskname);
+        //plannedHours= plannedHours-2;
         if (plannedHours > 0) {
             placeTask(Alldays, plannedHours, taskname);
 

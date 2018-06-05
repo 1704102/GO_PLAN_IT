@@ -3,32 +3,40 @@ package com.example.jersey.Model.HoldingElement;
 import java.util.Date;
 
 public class Taskblock {
-    Date startTime;
-    Date endTime;
-    int duration;
-    String taskname;
-    String subtask;
+    private int startTime;
+    private int endTime;
+    private Date date;
+    private int duration;
+    private String taskname;
+    private String subtask;
 
 
-    public Taskblock(Date Start, Date End, String taskname){
+    public Taskblock(Date Start, Date End, String taskname) {
 
     }
 
-
-    public Date getStartTime() {
+    public int getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(int startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public int getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(int endTime) {
         this.endTime = endTime;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getDuration() {

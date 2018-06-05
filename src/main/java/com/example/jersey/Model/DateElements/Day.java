@@ -20,6 +20,7 @@ public class Day {
 
     }
 
+
     //code for time block timespent+ standard score+ time into project+ random values.
 
     public void setTimeSpent(int x) {

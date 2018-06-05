@@ -2,38 +2,41 @@ package com.example.jersey.Controller;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 public class Util {
 
-    public static Calendar createCalender(long x){
+    public static Calendar createCalender(long x) {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(x));
         System.out.println(c.getTime().toString());
         return c;
     }
 
-    public static Calendar getFirstDayOfTheWeek(Calendar calendar){
+    public static Calendar getFirstDayOfTheWeek(Calendar calendar) {
         int pDay = calendar.get(Calendar.DAY_OF_WEEK) - 2;
         Calendar cal = calendar;
-        cal.add(Calendar.DATE, -1 * pDay );
+        cal.add(Calendar.DATE, -1 * pDay);
         return cal;
     }
 
-    public static String getTime(Time date, String offset){
+    public static String getTime(Time date, String offset) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         String hour = String.valueOf(date.getHours() + ((Integer.parseInt(offset) - date.getTimezoneOffset()) / 60));
         if (hour.equals("-1")) hour = "23";
         String minutes = String.valueOf(date.getMinutes());
-        if(Integer.parseInt(minutes) < 10){
+        if (Integer.parseInt(minutes) < 10) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("0" + minutes);
             minutes = stringBuilder.toString();
         }
-        if(Integer.parseInt(hour) < 10){
+        if (Integer.parseInt(hour) < 10) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("0" + hour);
             hour = stringBuilder.toString();
@@ -41,7 +44,7 @@ public class Util {
         return hour + ":" + minutes;
     }
 
-    public static String getDay(Timestamp date){
+    public static String getDay(Timestamp date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
@@ -49,7 +52,7 @@ public class Util {
         return String.valueOf(day);
     }
 
-    public static String generateToken(){
+    public static String generateToken() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
@@ -60,7 +63,7 @@ public class Util {
         return salt.toString();
     }
 
-    public static String DateToString(Calendar calendar){
+    public static String DateToString(Calendar calendar) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(calendar.get(Calendar.DAY_OF_MONTH));
         stringBuilder.append("-");
@@ -70,24 +73,37 @@ public class Util {
         return stringBuilder.toString();
     }
 
-    public static int dayToInt(String day){
-        switch (day){
-            case "Monday":return 0;
-            case "Tuesday":return 1;
-            case "Wednesday":return 2;
-            case "Thursday":return 3;
-            case "Friday":return 4;
-            case "Saturday":return 5;
-            case "Sunday":return 6;
-            default: return 0;
+    public static int dayToInt(String day) {
+        switch (day) {
+            case "Monday":
+                return 0;
+            case "Tuesday":
+                return 1;
+            case "Wednesday":
+                return 2;
+            case "Thursday":
+                return 3;
+            case "Friday":
+                return 4;
+            case "Saturday":
+                return 5;
+            case "Sunday":
+                return 6;
+            default:
+                return 0;
         }
     }
 
-    public static int daysBetween(Date d1, Date d2){
-        return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+    public static int daysBetween(Date d1, Date d2) {
+        return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
 
-
+    public static LocalDate stringToDate(String string) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-dd-mm", Locale.ENGLISH);
+        LocalDate date = LocalDate.parse(string, formatter);
+        System.out.println(date); // 2010-01-02
+        return date;
+    }
 
 
 }

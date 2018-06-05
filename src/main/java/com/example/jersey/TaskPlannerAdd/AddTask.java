@@ -14,7 +14,7 @@ import java.util.*;
 public class AddTask {
     private ArrayList<Day> days = new ArrayList();
     private ArrayList<Taskblock> tasks = new ArrayList();
-    private String today = Util.DateToString(Util.createCalender(Instant.now().toEpochMilli()));
+    private Calendar today = Util.createCalender(Instant.now().toEpochMilli());
 
     public void addnewTask(Date startDate, Date end, int plannedhours, String taskname) {
         /**
@@ -78,10 +78,9 @@ public class AddTask {
     }
 
     public Day RandomDay(ArrayList<Day> e) {
-        int x = e.size();
         Random rand = new Random();
-        int random = rand.nextInt(x);
-        return e.get(x);
+        int random = rand.nextInt(e.size());
+        return e.get(random);
     }
 
     private int getDaysUntilDeadline(Calendar currentDate, Calendar deadline) {
@@ -106,7 +105,7 @@ public class AddTask {
         String futureDate = Util.DateToString(Util.createCalender(new Date(Instant.now().toEpochMilli() + (long) (1000 * 60 * 60 * 24 * 364 * 50 * 100)).getTime()));
         String userToken = input.getString("token");
         String timezoneOffset = input.getString("timeOffset");
-        JSONArray output = timeElementDatabase.getAppointmentsOnDate(empty, today, futureDate, userToken, timezoneOffset);
+        JSONArray output = timeElementDatabase.getAppointmentsOnDate(empty, Util.DateToString(today), futureDate, userToken, timezoneOffset);
         output = timeElementDatabase.getAppointmentsOnRepeat(output, userToken, timezoneOffset);
 
         for (int i = 0; i < output.length(); i++) {
@@ -133,7 +132,6 @@ public class AddTask {
     }
 
     public boolean isPlannable(Task task) {
-        Calendar today = Util.createCalender(Instant.now().toEpochMilli());
         Calendar deadline = task.getDeadline();
 
         int talliedDays = getDaysUntilDeadline(today, deadline);

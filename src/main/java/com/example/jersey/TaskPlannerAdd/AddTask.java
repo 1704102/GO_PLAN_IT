@@ -12,10 +12,12 @@ import java.time.Instant;
 import java.util.*;
 
 public class AddTask {
-    private ArrayList<Taskblock> tasks = new ArrayList();
+    private ArrayList<Taskblock> generatedtasks = new ArrayList();
     //ArrayList actitvities()
     private Calendar today = Util.createCalender(Instant.now().toEpochMilli());
-
+    public ArrayList<Taskblock> getGeneratedtasks() {
+        return generatedtasks;
+    }
     public void addnewTask(Date startDate, Date end, int plannedhours, String taskname) {
         ArrayList<Day> days= listOfDays(startDate,end);
 
@@ -49,12 +51,15 @@ public class AddTask {
         ArrayList<Day> makedays= new ArrayList();
         Date daymaker=start;
         while(!daymaker.equals(end)){
-            Day day = new Day(daymaker);
-            makedays.add(day);
-            Calendar c = Calendar.getInstance();
-            c.setTime(daymaker);
-            c.add(Calendar.DATE, 1);
-            daymaker = c.getTime();
+            if(!daymaker.equals(end)) {
+                Day day = new Day(daymaker);
+                makedays.add(day);
+                Calendar c = Calendar.getInstance();
+                c.setTime(daymaker);
+
+                c.add(Calendar.DATE, 1);
+
+                daymaker = c.getTime();}
         }
         return makedays;
     }
@@ -62,16 +67,26 @@ public class AddTask {
 
         int x = 100000;
         for (Day d : Alldays) {
-            if (d.getDayscore() > x) ;
-            x = d.getDayscore();
+            if (d.getDayscore() < x) {
+                x = d.getDayscore();}
+
         }
+        //System.out.println(x);
+
         ArrayList<Day> optimaldays = getDaysWithScore(Alldays, x);
+        // System.out.println(optimaldays);
         //find optimal size
         //find optimal hours
         Day d = RandomDay(optimaldays);
-        makeTaskBlock(d, 0, taskname);
+        System.out.println(optimaldays);
+        int time =makeTaskBlock(d, taskname,plannedHours);
+
+        plannedHours = time;
+
+        d.addscore(5);
         //plannedHours= plannedHours-2;
         if (plannedHours > 0) {
+
             placeTask(Alldays, plannedHours, taskname);
 
         } else {
@@ -79,18 +94,18 @@ public class AddTask {
             return;
 
         }
+
     }
 
-    public void makeTaskBlock(Day d, int StartTime, String taskname) {
-        Date date = d.getDate();
-        Date datetime1 = date;
-        Date datetime2 = date;
-        datetime1.setHours(StartTime);
-        datetime2.setHours(StartTime + 2);
-        Taskblock t = new Taskblock(datetime1, datetime2, taskname);
-        tasks.add(t);
 
+    public int makeTaskBlock(Day d, String taskname, int planh) {
+        Date date=d.getDate();
 
+        //day get ideal timeblock.
+        Taskblock t = new Taskblock(date,100,300,taskname);
+        generatedtasks.add(t);
+        int time = t.getDuration();
+        return planh-time;
     }
 
     public Day RandomDay(ArrayList<Day> e) {

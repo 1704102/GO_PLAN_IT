@@ -16,8 +16,8 @@ public class Day {
     public Day(){}
 
 
-    public Day(Date date){
-
+    public Day(Date date1){
+        date = date1;
     }
 
 
@@ -43,7 +43,7 @@ public class Day {
         dayscore = 0;
     }
 
-    private void addscore(int x) {
+    public void addscore(int x) {
         dayscore = dayscore + x;
     }
 
@@ -61,6 +61,9 @@ public class Day {
 
     public int getDayscore() {
         return dayscore;
+    }
+    public String toString() {
+        return date.toString()+"  "+ getDayscore() +"   bugtestday";
     }
 }
 

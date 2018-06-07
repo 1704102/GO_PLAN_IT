@@ -13,21 +13,17 @@
 </div>
 <script>
     if (sessionStorage.getItem("token") != undefined){
-        $.ajax({
-            type: 'POST',
-            url: 'rest/login/check',
-            dataType: 'text',
-            contentType: 'application/json',
-            data: '{"token":"' + sessionStorage.getItem("token") + '"}',
-            success: function(data){
-                console.log(data);
-                if(data == "true"){
-                    window.location.href = '/agenda.jsp';
-                }else{
-                    sessionStorage.removeItem("token");
-                }
-            }
-        });
+
+        var input = JSON.parse("{}");
+        input["token"] = sessionStorage.getItem("token");
+
+        var output = postCall(input, 'rest/login/check', 'text');
+        if(output == "true"){
+            window.location.href = '/agenda.jsp';
+        }else{
+            sessionStorage.removeItem("token");
+        }
+
     }
 </script>
 <div class="content">
@@ -43,24 +39,19 @@
 
     <script>
         function login() {
-            $.ajax({
-                type: 'POST',
-                url: 'rest/login',
-                dataType: 'text',
-                contentType: 'application/json',
-                data: '{"username":"' + $("#username").val() + '","password":"'+$("#password").val()+'"}',
-                success: function(data){
-                    console.log(data);
-                    if(data == "error"){
-                        $("#username").css("border", "1px solid red");
-                        $("#password").css("border", "1px solid red");
-                        $("#error").css("display", "block");
-                    }else{
-                        sessionStorage.setItem("token", data);
-                        window.location.href = '/agenda.jsp';
-                    }
-                }
-            });
+            var input = JSON.parse("{}");
+            input['username'] = $("#username").val();
+            input['password'] = $("#password").val();
+
+            var data = postCall(input, 'rest/login', 'text').toString();
+            if(data == "error"){
+                $("#username").css("border", "1px solid red");
+                $("#password").css("border", "1px solid red");
+                $("#error").css("display", "block");
+            }else{
+                sessionStorage.setItem("token", data);
+                window.location.href = '/agenda.jsp';
+            }
         }
     </script>
 </div>

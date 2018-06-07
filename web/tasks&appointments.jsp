@@ -81,17 +81,19 @@
         <div style="display: inline-block;border-bottom: 1px solid black; text-align: center; font-size: 30px;">Task   <img src="css/images/button/remove.png" width="30px" height="30px;" onclick="closeAddTask()"><img src="css/images/button/trash.jpg" width="30px" height="30px;" onclick="deleteTask(); closeAddTask()"></div>
         <div id="task-id" style="display: none"></div>
         <div>
+        <div>
+            <div>
             <div>name</div>
-            <input type="text" id="task-name">
+            <input type="text" id="task-name"></div>
         </div>
         <div>
             <div>deadline</div>
         </div>
         <div>
-            <div>Date</div>
-            <input type="date" id="task-date">
-            <div>Time</div>
-            <input type="time" id="task-time">
+            <div><div>Date</div>
+            <input type="date" id="task-date"></div>
+            <div><div>Time</div>
+            <input type="time" id="task-time"></div>
         </div>
         <div id="subTaskContainer">
             <table id="subTasks">
@@ -101,16 +103,12 @@
                     <th>done</th>
                     <th>remove</th>
                 </tr>
-                <tr class='subTask'>
-                    <td><input class="name" type="text"></td>
-                    <td><input class="hours" type="text"></td>
-                    <td><input class="done" type="checkbox"></td>
-                    <td><img src="css/images/button/trash.jpg" width='25px' height='25px'></td>
-                </tr>
+
             </table>
             <div><img src="css/images/button/add.png" width="20px" height="20px" alt="add" onclick="addSubTask()"></div>
         </div>
-        <div><input type="button" value="add" onclick="saveTask()"></div>
+        <div><input type="button" value="save" onclick="saveTask()"></div>
+        </div>
     </div>
 </div>
 </body>

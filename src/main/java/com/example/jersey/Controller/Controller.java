@@ -34,10 +34,8 @@ public class Controller {
             @Override
             public void run() {
                 for (int i = 0; i < users.size(); i++){
-                    System.out.println(users.get(i).getSessionTime());
                     if (users.get(i).getSessionTime() == 14){
                         users.remove(i);
-                        System.out.println("removed user");
                     }else{
                         users.get(i).setSessionTime(users.get(i).getSessionTime() + 1);
                     }

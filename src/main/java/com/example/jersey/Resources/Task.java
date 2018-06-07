@@ -33,7 +33,7 @@ public class Task {
     public String getTask(String x){
         JSONObject input = new JSONObject(x);
         TaskDatabase taskDatabase = new TaskDatabase();
-        return taskDatabase.getTask(input).toString();
+        return taskDatabase.getFullTasks(input).toString();
     }
 
     @DELETE

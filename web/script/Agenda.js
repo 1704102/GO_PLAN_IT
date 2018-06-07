@@ -1,15 +1,34 @@
 var MONTHSOFYEAR = ["Januari", "Februari", "March", "April", "May", "June", "Juli", "August", "September", "October", "November", "December"];
 var DAYSOFWEEK= ["Sunday","Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var DATE = new Date();
-
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
+    }
+}
 function fillTable() {
     fillHours();
     fillHeader();
     fillDays();
-
 }
 
 function fillDays() {
+   // var input = JSON.parse("{}");
+   // input["date"] = DATE.getTime();
+   // input["timeOffset"] = DATE.getTimezoneOffset().toString();
+   // input["token"] = sessionStorage.getItem("token");
+   //
+   // var output = postCall(input, 'rest/agenda', 'json');
+   // console.log(output);
+   //  for (var data = 0; data < output.length; data++){
+   //      if (output.hasOwnProperty(data)){
+   //          console.log(output[data]);
+   //          addTimeElement(output[data])
+   //      }
+   //  }
     $.ajax({
         type: 'POST',
         url: 'rest/agenda',
@@ -18,7 +37,9 @@ function fillDays() {
         processData: true,
         data: '{"date":' + DATE.getTime() + ',"timeOffset":"'+DATE.getTimezoneOffset().toString()+'", "token": "' + sessionStorage.getItem("token") + '"}',
         success: function(data){
+            console.log(data);
             for (var day in data){
+                console.log(data[day]);
                 addTimeElement(data[day])
             }
         }
@@ -32,17 +53,17 @@ function fillHours() {
         }else{
             time = i;
         }
-        $(".timeTable").append("<tr>" + "<td colspan='8' class='time'><div class='timehour'>" +  time + ":00 </div></td>" + "</tr>");
+        $(".timeTable").append("<div>" + "<div class='time'><div class='timehour'>" +  time + ":00 </div></div>" + "</div>");
     }
-    $(".timeTable").append("<tr>\" + \"<td colspan='8' class='time'></td>\" + \"</tr>" );
+    $(".timeTable").append("<div>" + "<div class='time'><div class='timehour'> </div></div>" + "</div>");
 }
 
 function fillHeader() {
     $("#tableHeader").empty()
-    $("#tableHeader").append("<th>Time</th>");
+    $("#tableHeader").append("<div>Time</div>");
     DATE.setDate(DATE.getDate() - DATE.getDay() + 1);
     for(var i = 0; i < 7; i++){
-        $("#tableHeader").append("<th>" + DAYSOFWEEK[DATE.getDay()] + " " + (DATE.getDate()) + "</th>")
+        $("#tableHeader").append("<div>" + DAYSOFWEEK[DATE.getDay()] + " " + (DATE.getDate()) + "</div>")
         DATE.setDate(DATE.getDate() + 1);
     }
     DATE.setDate(DATE.getDate() - 7);
@@ -53,15 +74,15 @@ function fillHeader() {
 
 function nextWeek() {
     DATE.setDate(DATE.getDate() + 7);
-    fillHeader()
-    emptyDays()
+    fillHeader();
+    emptyDays();
     fillDays();
 }
 
 function previousWeek() {
     DATE.setDate(DATE.getDate() - 7);
-    fillHeader()
-    emptyDays()
+    fillHeader();
+    emptyDays();
     fillDays();
 }
 
@@ -87,18 +108,14 @@ function addTimeElement(task){
 }
 
 function positionTask(task, preId){
-    console.log(task);
     var splitTimeB = task.timeB.split(":");
     var splitTimeE = task.timeE.split(":");
-
-    console.log(splitTimeB);
-    console.log(splitTimeE);
 
     var minutesFromZeroB = (parseInt(splitTimeB[0]) * 60) + (parseInt(splitTimeB[1]));
     var minutesFromZeroE = (parseInt(splitTimeE[0]) * 60) + (parseInt(splitTimeE[1]));
 
-    var top = minutesFromZeroB * (28.850/60);
-    var height = (minutesFromZeroE - minutesFromZeroB) * (29.250/60);
+    var top = minutesFromZeroB * (30  /60) - 5.5;
+    var height = (minutesFromZeroE - minutesFromZeroB) * (30/60);
 
     $("."+ preId + task.id).each(function () {
         $(this).css("height", height + "px");

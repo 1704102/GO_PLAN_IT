@@ -11,7 +11,7 @@ import javax.ws.rs.Path;
 @Path("appointments")
 public class Appointments {
 
-    @PUT
+    @POST
     @Consumes("application/json")
     public String getAppointments(String x) {
         JSONObject input = new JSONObject(x);

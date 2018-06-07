@@ -150,4 +150,22 @@ tr * {
 .delete:hover{
     cursor: pointer;
 }
+#addTaskInput{
+    width: 800px;
+}
 
+#addTaskInput div{
+    width: 100%;
+}
+
+#addTaskInput div div div{
+    width: 500px;
+    margin: auto;
+}
+
+#addTaskInput div div div div, input{
+    display: inline-block;
+    width: 200px;}
+input{
+    text-align: center;
+}

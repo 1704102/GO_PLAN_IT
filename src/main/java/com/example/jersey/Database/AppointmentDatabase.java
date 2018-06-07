@@ -61,7 +61,6 @@ public class AppointmentDatabase extends DatabaseHelper {
             e.printStackTrace();
         }
         disconnect();
-        System.out.println(array.toString());
         return array;
     }
 

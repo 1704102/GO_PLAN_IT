@@ -17,10 +17,11 @@ body{
     cursor: pointer;
 }
 .menu{
+    z-index: 1;
     position: absolute;
     background-color: white;
     border-radius: 50%;
-    width: 100px;
+    width: 80px;
     height: 80px;
 }
 .menuItem{
@@ -40,6 +41,7 @@ li{
     color: black;
 }
 .content{
+    z-index: 0;
     position: relative;
     top: 60px;
     width: 80%;
@@ -48,16 +50,18 @@ li{
     margin: auto;
     border: 1px solid black;
 }
-table {
+.timeTable {
     margin: auto;
     width: 100%;
     border-bottom: 1px solid black;
     border-collapse: collapse;
 }
 
-table tr{
+#tableHeader div{
+    display: inline-block;
     border-bottom: 1px solid rgba(150, 150, 150, 0.31);
-    margin: -1px;
+    width: calc(100%/8);
+    text-align: center;
 }
 
 table tr th{
@@ -68,14 +72,16 @@ table tr th{
 }
 
 .time{
+    width: 100%;
     height: 29px;
     padding: 0;
     margin: 0;
+    border-bottom: 1px solid black;
 }
 
 .timeHour{
     position: relative;
-    top: 13.75px;
+    top: 19.5px;
     left: 20px;
 }
 
@@ -91,9 +97,9 @@ table tr th{
 .overlay{
     position: absolute;
     left: 12.5%;
-    top: 31px;
+    top: 44.5px;
     width: 87.5%;
-    height: calc(100% - 30px);
+    height: calc(100% - 45px);
 }
 
 .timeElement{

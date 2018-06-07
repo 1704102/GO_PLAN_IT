@@ -18,6 +18,7 @@ public class AddTask {
 
     public void addnewTask(Date startDate, Date end, int plannedhours, String taskname) {
         ArrayList<Day> days= listOfDays(startDate,end);
+
         /**
          // DONE (getDaysUntilDeadline): get all days starting from current day until due date of task,
          // DONE (addAppointments): and for all the days get the times of the activities on set day and
@@ -31,6 +32,7 @@ public class AddTask {
          */
         placeTask(days, plannedhours, taskname);
     }
+
 
     public ArrayList<Day> getDaysWithScore(ArrayList<Day> e, int dayscore) {
         ArrayList<Day> days = new ArrayList<>();

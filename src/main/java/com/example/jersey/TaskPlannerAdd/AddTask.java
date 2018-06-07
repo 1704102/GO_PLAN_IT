@@ -64,6 +64,7 @@ public class AddTask {
             String timeE = appointment.getString("timeE");
             Date date = new Date(0);
             int repeating = 0;
+            //committobesure
             try {
                 date = (Date) appointment.get("date");
             } catch (Exception e) {

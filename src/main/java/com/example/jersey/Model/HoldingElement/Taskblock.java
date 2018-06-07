@@ -2,6 +2,9 @@ package com.example.jersey.Model.HoldingElement;
 
 import java.util.Date;
 
+
+import java.util.Date;
+
 public class Taskblock {
     private int startTime;
     private int endTime;
@@ -11,8 +14,13 @@ public class Taskblock {
     private String subtask;
 
 
-    public Taskblock(Date Start, Date End, String taskname) {
+    public Taskblock(Date start, int startime, int endtime, String taskname) {
 
+        date= start;
+        startTime= startime;
+        endTime=endtime;
+        this.taskname=taskname;
+        duration = (endTime-startTime)/100;
     }
 
     public int getStartTime() {
@@ -61,5 +69,9 @@ public class Taskblock {
 
     public void setSubtask(String subtask) {
         this.subtask = subtask;
+    }
+    public String toString() {
+
+        return "\n"+taskname+date.toString();
     }
 }

@@ -2,7 +2,7 @@ package com.example.jersey.Database;
 
 import com.example.jersey.Controller.Controller;
 import com.example.jersey.Controller.Util;
-import com.example.jersey.Model.Appointment;
+import com.example.jersey.Appointment.Appointment;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -76,21 +76,21 @@ public class AppointmentDatabase extends DatabaseHelper {
         disconnect();
     }
 
-    public Appointment parseJSonObject(JSONObject object) {
-        String name = object.getString("name");
-        String timeB = object.getString("timeB");
-        String timeE = object.getString("timeE");
-        String dateString = object.getString("date");
-        LocalDate date = Util.stringToDate(dateString);
-        return new Appointment(name, timeB, timeE, date);
-    }
-
-    public List<Appointment> parseJSONArrayList(JSONArray array) {
-        List<Appointment> appointments = new ArrayList<>();
-
-        for (Object object : array) {
-            appointments.add(parseJSonObject((JSONObject) object));
-        }
-        return appointments;
-    }
+//    public Appointment parseJSonObject(JSONObject object) {
+//        String name = object.getString("name");
+//        String timeB = object.getString("timeB");
+//        String timeE = object.getString("timeE");
+//        String dateString = object.getString("date");
+//        LocalDate date = Util.stringToDate(dateString);
+//        return new Appointment(name, timeB, timeE, date);
+//    }
+//
+//    public List<Appointment> parseJSONArrayList(JSONArray array) {
+//        List<Appointment> appointments = new ArrayList<>();
+//
+//        for (Object object : array) {
+//            appointments.add(parseJSonObject((JSONObject) object));
+//        }
+//        return appointments;
+//    }
 }

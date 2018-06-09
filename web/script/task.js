@@ -1,32 +1,25 @@
 function openTask(id) {
-    $("#task-id").append(data);
     $("#addTask").css("display", "block");
-    var data = JSON.parse("{}");
+    var input = JSON.parse("{}");
     var date = new Date();
-    data["id"] = id;
-    data["timeOffset"] = date.getTimezoneOffset().toString();
-    $.ajax({
-        type: 'PUT',
-        url: 'rest/task',
-        data: JSON.stringify(data),
-        contentType: 'application/json',
-        success: function(data){
-            var date = data[0].deadline;
-            console.log(data[0]);
-            $("#task-id").empty();
-            $("#task-id").append(id);
-            $("#task-name").val(data[0].name);
-            $("#task-date").val(date);
-            $("#task-time").val(data[0].time);
-            $("#subTasks").find(".subTask").remove();
-            if(data[0].tasks.length == 0){
-                addSubTask();
-            }
-            for(var subtask in data[0].tasks){
-                addSubTaskWithData(data[0].tasks[subtask]);
-            }
-        }
-    });
+    input["id"] = id;
+    input["timeOffset"] = date.getTimezoneOffset().toString();
+    var data = putCall(input, "rest/task");
+    var date = data[0].deadline;
+    console.log(data[0]);
+    $("#task-id").empty();
+    $("#task-id").append(id);
+    $("#task-name").val(data[0].name);
+    $("#task-date").val(date);
+    $("#task-time").val(data[0].time);
+    $("#subTasks").find(".subTask").remove();
+    if(data[0].tasks.length == 0){
+        addSubTask();
+    }
+    for(var subtask in data[0].tasks){
+        addSubTaskWithData(data[0].tasks[subtask]);
+    }
+
 }
 
 function getTasks() {
@@ -60,16 +53,7 @@ function saveTask() {
     });
 
     data["subTasks"] = subtasks;
-
-    console.log(data);
-        $.ajax({
-            type: 'PUT',
-            url: 'rest/task/data',
-            data: JSON.stringify(data),
-            contentType: 'application/json',
-            success: function(data){
-            }
-        });
+    putCall(data, "rest/task/data");
 
 
 }
@@ -78,27 +62,11 @@ function deleteCheckTask() {
     var data = JSON.parse("{}");
     data["token"] =  sessionStorage.getItem("token");
     data["id"] = $("#task-id").text();
-    $.ajax({
-        type: 'DELETE',
-        url: 'rest/task/check ',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(data){
-        }
-    });
+    deleteCall(data, "rest/task/check");
 }
 function deleteTask() {
     var data = JSON.parse("{}");
     data["token"] =  sessionStorage.getItem("token");
     data["id"] = $("#task-id").text();
-    $.ajax({
-        type: 'DELETE',
-        url: 'rest/task ',
-        dataType: 'text',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(data){
-        }
-    });
+    deleteCall(data, "rest/task");
 }

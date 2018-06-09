@@ -67,6 +67,10 @@ public class Day {
 
 
         }
+        if (starttime ==900 && endtime==0) {
+            longestDuration =1200;
+            longestStarttime=900;
+        }
         if (longestDuration>200) {Taskblock t = new Taskblock(getDate(),longestStarttime,(longestStarttime+2),name);
             return t;}
         else{

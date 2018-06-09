@@ -85,12 +85,12 @@ public class AddTask {
         // System.out.println(optimaldays);
         //find optimal size
         //find optimal hours
-        //Day d = RandomDay(optimaldays);
-        System.out.println(optimaldays);
+        Day d = RandomDay(optimaldays);
+        //System.out.println(optimaldays);
         //int time = makeTaskBlock(d, taskname, plannedHours);
 
         //plannedHours = time;
-
+        Taskblock t = d.getlargestFreehours(taskname);
         //d.addscore(5);
         //plannedHours= plannedHours-2;
         if (plannedHours > 0) {

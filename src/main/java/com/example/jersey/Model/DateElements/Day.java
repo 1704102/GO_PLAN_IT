@@ -41,7 +41,7 @@ public class Day {
     public Day(Date date1){
         date = date1;
     }
-    public String getlargestFreehours() {
+    public Taskblock getlargestFreehours(String name) {
         TreeMap tm = new TreeMap();
         for(Taskblock b: tasksofday) {
             tm.put(b.getStartTime(),b.getEndTime() );
@@ -65,8 +65,17 @@ public class Day {
             }
             starttime = (int)me.getValue();
 
+
         }
-        return longestDuration +  " " +longestStarttime;
+        if (longestDuration>200) {Taskblock t = new Taskblock(getDate(),longestStarttime,(longestStarttime+2),name);
+            return t;}
+        else{
+            Taskblock t = new Taskblock(getDate(),longestStarttime,longestDuration,name);
+            return t;
+
+        }
+
+
     }
 
 

@@ -33,13 +33,21 @@ function postCall(input, rest, dataType) {
 }
 
 function putCall(input, rest) {
-    var output = "";
+    var output = JSON.parse("{}");
     $.ajax({
         type: 'PUT',
         url: rest,
+        async: false,
+        processData: true,
         data: JSON.stringify(input),
-        contentType: 'application/json'
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(data) {
+            output = data;
+            console.log(output);
+        }
     });
+    console.log(output);
     return output;
 }
 

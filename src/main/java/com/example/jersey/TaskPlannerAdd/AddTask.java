@@ -91,6 +91,8 @@ public class AddTask {
 
         //plannedHours = time;
         Taskblock t = d.getlargestFreehours(taskname);
+        generatedtasks.add(t);
+
         //d.addscore(5);
         //plannedHours= plannedHours-2;
         if (plannedHours > 0) {

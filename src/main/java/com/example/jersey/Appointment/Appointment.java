@@ -1,13 +1,14 @@
 package com.example.jersey.Appointment;
 
+import java.sql.Time;
 import java.time.LocalDate;
 
 public abstract class Appointment {
     private String name;
-    private String timeB;
-    private String timeE;
+    private Time timeB;
+    private Time timeE;
 
-    public Appointment(String name, String timeB, String timeE) {
+    public Appointment(String name, Time timeB, Time timeE) {
         this.name = name;
         this.timeB = timeB;
         this.timeE = timeE;
@@ -21,19 +22,19 @@ public abstract class Appointment {
         this.name = name;
     }
 
-    public String getTimeB() {
+    public Time getTimeB() {
         return timeB;
     }
 
-    public void setTimeB(String timeB) {
+    public void setTimeB(Time timeB) {
         this.timeB = timeB;
     }
 
-    public String getTimeE() {
+    public Time getTimeE() {
         return timeE;
     }
 
-    public void setTimeE(String timeE) {
+    public void setTimeE(Time timeE) {
         this.timeE = timeE;
     }
 

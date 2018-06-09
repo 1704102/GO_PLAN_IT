@@ -1,5 +1,8 @@
 package com.example.jersey.Model.TimeElements;
 
+import java.sql.Date;
+import java.sql.Time;
+
 public class AppointmentElement extends TimeElement{
 
     private String name;
@@ -7,12 +10,10 @@ public class AppointmentElement extends TimeElement{
     private boolean repeating;
     private String repeatingType;
 
-    public AppointmentElement(String name, boolean repeating, String repeatingType, String timeB, String timeE, String date) {
+    public AppointmentElement(String name, boolean repeating, String repeatingType, Time timeB, Time timeE) {
+        super(timeB,timeE);
         this.name = name;
         this.repeating = repeating;
         this.repeatingType = repeatingType;
-        this.timeB =timeB;
-        this.timeE =timeE;
-        this.date = date;
     }
 }

@@ -56,7 +56,7 @@ public class Day {
         while(i.hasNext()) {
             Map.Entry me = (Map.Entry)i.next();
             endtime = (int) me.getKey();
-            if(endtime>starttime) {
+            if(endtime>starttime && starttime>2100 && endtime>2100) {
                 Duration = endtime-starttime;
                 System.out.println(Duration+ "");
                 if (Duration>longestDuration) {

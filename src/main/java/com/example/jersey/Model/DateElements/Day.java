@@ -1,24 +1,19 @@
 package com.example.jersey.Model.DateElements;
 
 import com.example.jersey.Controller.Util;
+import com.example.jersey.Model.HoldingElement.Taskblock;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public class Day {
     private int timeSpent = 0;
     private int dayscore = 0;
     private ArrayList<Integer> freehours = new ArrayList<Integer>();
-    private Date date;
+    private Date date=null;
+    public ArrayList<Taskblock> tasksofday  = new ArrayList();
 
     public Day(){}
 
-
-    public Day(Date date1){
-        date = date1;
-    }
 
 
     //code for time block timespent+ standard score+ time into project+ random values.
@@ -38,6 +33,42 @@ public class Day {
             dayscore = 10000;
         }
     }
+    public void AddTaskBlock(Taskblock t) {
+        tasksofday.add(t);
+    }
+
+
+    public Day(Date date1){
+        date = date1;
+    }
+    public String getlargestFreehours() {
+        TreeMap tm = new TreeMap();
+        for(Taskblock b: tasksofday) {
+            tm.put(b.getStartTime(),b.getEndTime() );
+        }
+        Set set = tm.entrySet();
+        Iterator i = set.iterator();
+        int starttime = 900;
+        int endtime=0;
+        int Duration = 0;
+        int longestDuration=0;
+        int longestStarttime=0;
+        while(i.hasNext()) {
+            Map.Entry me = (Map.Entry)i.next();
+            endtime = (int) me.getKey();
+            if(endtime>starttime) {
+                Duration = endtime-starttime;
+                System.out.println(Duration+ "");
+                if (Duration>longestDuration) {
+                    longestDuration = Duration;
+                    longestStarttime=endtime;}
+            }
+            starttime = (int)me.getValue();
+
+        }
+        return longestDuration +  " " +longestStarttime;
+    }
+
 
     public void setScore(int x) {
         dayscore = 0;

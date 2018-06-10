@@ -1,15 +1,18 @@
 package com.example.jersey.Model.HoldingElement;
 
+import java.sql.Time;
+import java.time.LocalDate;
+
 public class SubTask {
 
     private String name;
-    private String deadline;
+    private LocalDate deadline;
 
     private int estimatedHours;
 
     private boolean finished;
 
-    public SubTask(String name, String deadline, int estimatedHours, boolean finished) {
+    public SubTask(String name, LocalDate deadline, int estimatedHours, boolean finished) {
         this.name = name;
         this.deadline = deadline;
         this.estimatedHours = estimatedHours;
@@ -24,11 +27,11 @@ public class SubTask {
         this.name = name;
     }
 
-    public String getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(String deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 

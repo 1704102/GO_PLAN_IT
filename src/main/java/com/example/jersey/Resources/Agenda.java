@@ -29,7 +29,7 @@ public class Agenda {
         JSONObject object = new JSONObject(x);
 
         AddTask task = new AddTask();
-        task.addAppointments(object);
+        task.GeneratePlanning(object);
 
 
         if (!object.getString("token").equals("null")) {

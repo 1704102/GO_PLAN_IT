@@ -1,22 +1,23 @@
 package com.example.jersey.Model.HoldingElement;
 
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Task {
 
     private String name;
-    private Calendar deadline;
-
-    private boolean finished;
+    private LocalDate deadline;
+    private Time time;
 
     private ArrayList<SubTask> subTasks;
 
-    public Task(String name, Calendar deadline, boolean finished, ArrayList<SubTask> subTasks) {
+    public Task(String name, LocalDate deadline,Time time, ArrayList<SubTask> subTasks) {
         this.name = name;
         this.deadline = deadline;
-        this.finished = finished;
         this.subTasks = subTasks;
+        this.time = time;
     }
 
     public int getTotalEstimatedHours(){
@@ -35,20 +36,12 @@ public class Task {
         this.name = name;
     }
 
-    public Calendar getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Calendar deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
-    }
-
-    public boolean isFinished() {
-        return finished;
-    }
-
-    public void setFinished(boolean finished) {
-        this.finished = finished;
     }
 
     public ArrayList<SubTask> getSubTasks() {

@@ -38,4 +38,8 @@ public abstract class Appointment {
         this.timeE = timeE;
     }
 
+    public long getDuration(){
+        return (timeE.getTime() - timeB.getTime())/1000/60;
+    }
+
 }

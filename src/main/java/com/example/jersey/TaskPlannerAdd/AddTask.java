@@ -5,10 +5,10 @@ import com.example.jersey.Appointment.DateAppointment;
 import com.example.jersey.Appointment.RepeatingAppointment;
 import com.example.jersey.Controller.JsonElementParser;
 import com.example.jersey.Controller.Util;
+import com.example.jersey.Database.TaskDatabase;
 import com.example.jersey.Database.TimeElementDatabase;
 import com.example.jersey.Model.DateElements.Day;
 import com.example.jersey.Model.HoldingElement.Task;
-import com.example.jersey.Model.HoldingElement.Taskblock;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.time.LocalDate;
@@ -16,65 +16,26 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class AddTask {
-    private ArrayList<Taskblock> generatedtasks = new ArrayList();
-    //ArrayList actitvities()
+
     LocalDate today = LocalDate.now();
+    HashMap<LocalDate, Day> days;
 
-    public ArrayList<Taskblock> getGeneratedtasks() {
-        return generatedtasks;
+    public void GeneratePlanning(JSONObject input){
+        LocalDate futureDate = LocalDate.of(2018,8,20);
+        String token = input.getString("token");
+        String offset = input.getString("timeOffset");
+
+        days = fillDays(futureDate,getRepAppointments(token,offset),token,offset);
+
+        planTasks(input);
     }
 
-    public void AddnewTask(Date startDate, Date end, int plannedhours, String taskname) {
-//        ArrayList<Day> days = listOfDays(startDate, end);
-        /**
-         // DONE (getDaysUntilDeadline): get all days starting from current day until due date of task,
-         // DONE (addAppointments): and for all the days get the times of the activities on set day and
-         // all the repeating tasks. then give the day a score(bonus points on weekend 1 point)
-         // and a higher score in the last quarter of the project time(15 bonus points)
+    public void planTasks(JSONObject input){
+        HashMap<LocalDate, Day> daysOfChoice = getDaysWithLowestScore();
+        ArrayList<Task> tasks = JsonElementParser.parseTaskArray(input, Integer.parseInt(input.getString("timeOffset")));
+        System.out.println(tasks);
 
-         // check if the amount of free time is enough to plan the task.
-
-         // find the day with the least points
-         // from the data base get the free time hours
-         // place a time block there on a free time space.
-         */
-//        placeTask(days, plannedhours, taskname);
-    }
-
-
-    public ArrayList<Day> getDaysWithScore(ArrayList<Day> e, int dayscore) {
-        ArrayList<Day> days = new ArrayList<>();
-        for (Day day : e) {
-            if (day.getDayscore() == dayscore) {
-                days.add(day);
-            }
-
-        }
-
-        return days;
-    }
-
-    public void placeTask(ArrayList<Day> Alldays, int plannedHours, String taskname) {
-
-        int x = 100000;
-        for (Day d : Alldays) {
-            if (d.getDayscore() < x) {
-                x = d.getDayscore();
-            }
-
-        }
-
-        ArrayList<Day> optimaldays = getDaysWithScore(Alldays, x);
-        if (plannedHours > 0) {
-
-            placeTask(Alldays, plannedHours, taskname);
-
-        } else {
-            //task database
-            return;
-
-        }
-
+        //TODO plan task into days
     }
 
 
@@ -93,12 +54,11 @@ public class AddTask {
         for (LocalDate date = today; date.isBefore(end); date = date.plusDays(1)){
             Day day = new Day(date);
             if (date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7){
-                day.addscore(30);
+                day.addscore(100);
             }
 
             appointments.get(date.getDayOfWeek().getValue() - 1).forEach(app->{
                 day.appointmentsOfToday.add(app);
-                day.addscore(10);
             });
 
             days.put(date, day);
@@ -108,7 +68,10 @@ public class AddTask {
         database.getAppointmentsOnDate(new JSONArray(),timeB, timeE, token, timeOffset).forEach(appointment->{
             DateAppointment appointment1 = JsonElementParser.parseDateAppointment((JSONObject) appointment);
             days.get(appointment1.getDate()).addAppointment(appointment1);
-            days.get(appointment1.getDate()).addscore(10);
+        });
+
+        days.forEach((key, value)->{
+            value.calculatePoints();
         });
 
         return days;
@@ -129,21 +92,8 @@ public class AddTask {
 
         return appointments;
     }
-    public void addAppointments (JSONObject input){
-        LocalDate futureDate = LocalDate.of(2018,8,20);
-        String token = input.getString("token");
-        String offset = input.getString("timeOffset");
 
-        HashMap<LocalDate, Day> days = fillDays(futureDate,getRepAppointments(token,offset),token,offset);
-
-
-    }
-
-    public void addTask(Day day, Task task){
-        //day.AddTaskBlock(new Taskblock());
-    }
-
-    public HashMap<LocalDate, Day> getDaysWithLowestScore(HashMap<LocalDate, Day> days){
+    public HashMap<LocalDate, Day> getDaysWithLowestScore(){
         HashMap<LocalDate, Day> output = new HashMap<>();
 
         Object[] keySet = days.keySet().toArray();

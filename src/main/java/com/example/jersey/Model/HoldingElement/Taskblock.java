@@ -1,41 +1,42 @@
 package com.example.jersey.Model.HoldingElement;
 
+import java.sql.Time;
 import java.util.Date;
 
 
 import java.util.Date;
 
 public class Taskblock {
-    private int startTime;
-    private int endTime;
+    private Time startTime;
+    private Time endTime;
     private Date date;
-    private int duration;
+    private long duration;
     private String taskname;
     private String subtask;
 
 
-    public Taskblock(Date start, int startime, int endtime, String taskname) {
+    public Taskblock(Date start, Time startime, Time endtime, String taskname) {
 
         date= start;
         startTime= startime;
         endTime=endtime;
         this.taskname=taskname;
-        duration = (endTime-startTime)/100;
+        duration = (endTime.getTime()-startTime.getTime())/1000/60;
     }
 
-    public int getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(int startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
-    public int getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(int endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
 
@@ -47,11 +48,11 @@ public class Taskblock {
         this.date = date;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 

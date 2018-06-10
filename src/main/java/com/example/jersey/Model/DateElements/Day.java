@@ -5,13 +5,14 @@ import com.example.jersey.Controller.Util;
 import com.example.jersey.Model.HoldingElement.Taskblock;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Day {
     private int timeSpent = 0;
     private int dayscore = 0;
     private ArrayList<Integer> freehours = new ArrayList<Integer>();
-    private Date date=null;
+    private LocalDate date;
     public ArrayList<Taskblock> tasksofday  = new ArrayList();
     public ArrayList<Appointment> appointmentsOfToday  = new ArrayList();
     public Day(){}
@@ -40,7 +41,7 @@ public class Day {
     }
 
 
-    public Day(Date date1){
+    public Day(LocalDate date1){
         date = date1;
     }
 
@@ -138,11 +139,11 @@ public class Day {
         this.appointmentsOfToday = appointmentsOfToday;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

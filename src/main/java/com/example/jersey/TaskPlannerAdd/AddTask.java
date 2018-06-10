@@ -9,12 +9,8 @@ import com.example.jersey.Database.TimeElementDatabase;
 import com.example.jersey.Model.DateElements.Day;
 import com.example.jersey.Model.HoldingElement.Task;
 import com.example.jersey.Model.HoldingElement.Taskblock;
-import com.sun.corba.se.impl.oa.poa.AOMEntry;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.sql.Time;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -58,24 +54,6 @@ public class AddTask {
         return days;
     }
 
-//    public ArrayList<Day> listOfDays(Date start, Date end) {
-//        ArrayList<Day> makedays = new ArrayList();
-//        Date daymaker = start;
-//        while (!daymaker.equals(end)) {
-//            if (!daymaker.equals(end)) {
-//                Day day = new Day(daymaker);
-//                makedays.add(day);
-//                Calendar c = Calendar.getInstance();
-//                c.setTime(daymaker);
-//
-//                c.add(Calendar.DATE, 1);
-//
-//                daymaker = c.getTime();
-//            }
-//        }
-//        return makedays;
-//    }
-
     public void placeTask(ArrayList<Day> Alldays, int plannedHours, String taskname) {
 
         int x = 100000;
@@ -85,22 +63,8 @@ public class AddTask {
             }
 
         }
-        //System.out.println(x);
 
         ArrayList<Day> optimaldays = getDaysWithScore(Alldays, x);
-        // System.out.println(optimaldays);
-        //find optimal size
-        //find optimal hours
-        //Day d = RandomDay(optimaldays);
-        //System.out.println(optimaldays);
-        //int time = makeTaskBlock(d, taskname, plannedHours);
-
-        //plannedHours = time;
-        //Taskblock t = d.getlargestFreehours(taskname);
-        //generatedtasks.add(t);
-
-        //d.addscore(5);
-        //plannedHours= plannedHours-2;
         if (plannedHours > 0) {
 
             placeTask(Alldays, plannedHours, taskname);
@@ -114,37 +78,12 @@ public class AddTask {
     }
 
 
-//    public int makeTaskBlock(Day d, String taskname, int planh) {
-//        Date date = d.getDate();
-
-        //day get ideal timeblock.
-//        Taskblock t = new Taskblock(date, 100, 300, taskname);
-//        generatedtasks.add(t);
-//        int time = t.getDuration();
-//        return planh - time;
-//    }
-
     public Day RandomDay (HashMap<LocalDate, Day> e) {
         Random rand = new Random();
         Set keyset = e.keySet();
         return e.get(keyset.toArray()[rand.nextInt(keyset.size())]);
     }
 
-//    private int getDaysUntilDeadline (Calendar currentDate, Calendar deadline){
-//        return Util.daysBetween(currentDate.getTime(), deadline.getTime());
-//    }
-
-//    public ArrayList<Day> sortDays ( int amountDays){
-//        ArrayList<Day> days = new ArrayList();
-//        Calendar calendar = Util.createCalender(Instant.now().toEpochMilli());
-//        for (int i = 0; i < amountDays; i++) {
-//            days.add(new Day() {{
-//                setDate(calendar.getTime());
-//            }});
-//            calendar.add(Calendar.DATE, 1);
-//        }
-//        return days;
-//    }
 
     public HashMap<LocalDate, Day> fillDays(LocalDate end, HashMap<Integer, ArrayList<Appointment>> appointments, String token, String timeOffset){
 
@@ -223,21 +162,6 @@ public class AddTask {
         });
         return output;
     }
-
-//    public boolean isPlannable(Task task){
-//        Calendar today = Util.createCalender(Instant.now().toEpochMilli());
-//        Calendar deadline = task.getDeadline();
-//
-//        int talliedDays = getDaysUntilDeadline(today, deadline);
-//        List<Day> sortedDays = sortDays(talliedDays);
-//
-//
-//        for (Day d : sortedDays) {
-//            /** do stuff*/
-//            return true;
-//        }
-//        return false;
-//    }
 
 
 }

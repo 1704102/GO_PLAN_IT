@@ -3,12 +3,15 @@ package com.example.jersey.TaskPlannerAdd;
 import com.example.jersey.Appointment.Appointment;
 import com.example.jersey.Appointment.DateAppointment;
 import com.example.jersey.Appointment.RepeatingAppointment;
+import com.example.jersey.Controller.Controller;
 import com.example.jersey.Controller.JsonElementParser;
 import com.example.jersey.Controller.Util;
 import com.example.jersey.Database.TaskDatabase;
 import com.example.jersey.Database.TimeElementDatabase;
 import com.example.jersey.Model.DateElements.Day;
 import com.example.jersey.Model.HoldingElement.Task;
+import com.example.jersey.Model.HoldingElement.Taskblock;
+import com.example.jersey.Model.TimeElements.TimeElement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.time.LocalDate;
@@ -31,18 +34,49 @@ public class AddTask {
     }
 
     public void planTasks(JSONObject input){
-        HashMap<LocalDate, Day> daysOfChoice = getDaysWithLowestScore();
         ArrayList<Task> tasks = JsonElementParser.parseTaskArray(input, Integer.parseInt(input.getString("timeOffset")));
         System.out.println(tasks);
 
         //TODO plan task into days
+        tasks.sort(Comparator.comparing(task -> task.getDeadline()));
+        tasks.forEach(task -> {
+            ArrayList<Taskblock> blocks = task.getTaskBocks();
+            HashMap<LocalDate , Day> prepDays = getDaysWithLowestScore(task.getDeadline());
+            while (blocks.size() != 0){
+                for(int i = 0; i < blocks.size(); i++){
+                    if (prepDays.size() == 0) prepDays = getDaysWithLowestScore(task.getDeadline());
+                    Day day  =  getRandomDay(prepDays);
+                    day.tasksofday.add(blocks.get(0));
+                    day.addscore(120);
+                    blocks.remove(0);
+                }
+            }
+        });
+
+        days.forEach((key, value)->{
+            value.tasksofday.forEach(taskBlock->{
+                tasks.forEach(task->{
+                    if (taskBlock.getTask().getName().equals(task.getName())){
+
+                    }
+                });
+            });
+        });
+
+        TimeElementDatabase database = new TimeElementDatabase();
+        database.resetTimeElements(Controller.getUser(input.getString("token")).getId());
+
+
     }
 
 
-    public Day RandomDay (HashMap<LocalDate, Day> e) {
+    public Day getRandomDay (HashMap<LocalDate, Day> e) {
         Random rand = new Random();
         Set keyset = e.keySet();
-        return e.get(keyset.toArray()[rand.nextInt(keyset.size())]);
+        int randI = rand.nextInt(keyset.size());
+        Day day = e.get(keyset.toArray()[randI]);
+        e.remove(keyset.toArray()[randI]);
+        return day;
     }
 
 
@@ -93,21 +127,26 @@ public class AddTask {
         return appointments;
     }
 
-    public HashMap<LocalDate, Day> getDaysWithLowestScore(){
+    public HashMap<LocalDate, Day> getDaysWithLowestScore(LocalDate deadline){
         HashMap<LocalDate, Day> output = new HashMap<>();
 
         Object[] keySet = days.keySet().toArray();
         int lowest = days.get(keySet[0]).getDayscore();
         for (int i = 1; i < keySet.length; i++){
-            if (days.get(keySet[i]).getDayscore() < lowest){
-                lowest = days.get(keySet[i]).getDayscore();
+            LocalDate date = (LocalDate) keySet[i];
+            if (date.isBefore(deadline)) {
+                if (days.get(keySet[i]).getDayscore() < lowest) {
+                    lowest = days.get(keySet[i]).getDayscore();
+                }
             }
         }
 
         int finalLowest = lowest;
         days.forEach((key, value) -> {
-            if (value.getDayscore() == finalLowest){
-                output.put(key, value);
+            if (value.getDayscore() == finalLowest) {
+                if (key.isBefore(deadline)) {
+                    output.put(key, value);
+                }
             }
         });
         return output;

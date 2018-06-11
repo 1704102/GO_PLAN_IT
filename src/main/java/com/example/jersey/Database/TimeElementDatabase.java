@@ -114,4 +114,16 @@ public class TimeElementDatabase extends DatabaseHelper{
         return array;
     }
 
+    public void resetTimeElements(int token) {
+        connect();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("delete a from time_element as a left join subtask as b on a.subtask_id = b.id left join task as c on b.task_id = c.id where c.user_id = ?");
+            statement.setInt(1, token);
+            statement.execute();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        disconnect();
+    }
 }

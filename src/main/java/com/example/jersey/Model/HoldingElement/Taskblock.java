@@ -9,19 +9,14 @@ import java.util.Date;
 public class Taskblock {
     private Time startTime;
     private Time endTime;
-    private Date date;
-    private long duration;
-    private String taskname;
-    private String subtask;
+
+    private Task task;
+    private SubTask subtask;
 
 
-    public Taskblock(Date start, Time startime, Time endtime, String taskname) {
+    public Taskblock(Task task) {
 
-        date= start;
-        startTime= startime;
-        endTime=endtime;
-        this.taskname=taskname;
-        duration = (endTime.getTime()-startTime.getTime())/1000/60;
+        this.task=task;
     }
 
     public Time getStartTime() {
@@ -40,39 +35,25 @@ public class Taskblock {
         this.endTime = endTime;
     }
 
-    public Date getDate() {
-        return date;
+
+    public Task getTask() {
+        return task;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public String getTaskname() {
-        return taskname;
-    }
-
-    public void setTaskname(String taskname) {
-        this.taskname = taskname;
-    }
-
-    public String getSubtask() {
+    public SubTask getSubtask() {
         return subtask;
     }
 
-    public void setSubtask(String subtask) {
+    public void setSubtask(SubTask subtask) {
         this.subtask = subtask;
     }
+
     public String toString() {
 
-        return "\n"+taskname+date.toString();
+        return "\n";
     }
 }

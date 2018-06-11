@@ -28,6 +28,15 @@ public class Task {
         return total;
     }
 
+    public ArrayList<Taskblock> getTaskBocks(){
+        ArrayList<Taskblock> taskBlocks = new ArrayList<>();
+        int temp = (int) Math.ceil((double)getTotalEstimatedHours() / 2);;
+        for(int i = 0; i < temp; i++){
+            taskBlocks.add(new Taskblock(this));
+        }
+        return taskBlocks;
+    }
+
     public String getName() {
         return name;
     }

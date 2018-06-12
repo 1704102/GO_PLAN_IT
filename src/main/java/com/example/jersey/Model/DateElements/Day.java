@@ -1,10 +1,10 @@
 package com.example.jersey.Model.DateElements;
 import com.example.jersey.Appointment.Appointment;
 import com.example.jersey.Model.TimeElements.*;
-import com.example.jersey.Controller.Util;
 import com.example.jersey.Model.HoldingElement.Taskblock;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -15,16 +15,6 @@ public class Day {
     public ArrayList<Appointment> appointmentsOfToday  = new ArrayList();
     public Day(){}
     public ArrayList<TimeElement> blocks;
-
-
-    public void AddTaskBlock(Taskblock t, Time begin, Time end) {
-
-        t.setStartTime(blocks.get(0).getTimeB());
-        t.setEndTime(blocks.get(0).getTimeE());
-        blocks.remove(0);
-        tasksofday.add(t);
-    }
-
 
     public Day(LocalDate date1){
         date = date1;
@@ -39,37 +29,53 @@ public class Day {
     public TimeElement getTimeElement(){
 
         // sort task on begin time
-        appointmentsOfToday.sort(Comparator.comparing(o -> o.getTimeB()));
-
-        TimeElement el = blocks.get(0);
-        blocks.remove(0);
+        //appointmentsOfToday.sort(Comparator.comparing(o -> o.getTimeB()));
+        int i = blocks.size()/2;
+        TimeElement el = blocks.get(i);
+        blocks.remove(i);
 
         return el;
     }
 
-    public void getTimeElements(Time begin, Time end){
+    public void getFreeTimeBlocks(Time begin, Time end){
         blocks = new ArrayList<>();
         appointmentsOfToday.sort(Comparator.comparing(o -> o.getTimeB()));
+
         if (appointmentsOfToday.size() > 0) {
 
             // get time between begin and first task
-            blocks.add(new TimeElement(begin, appointmentsOfToday.get(0).getTimeB()));
+            generateTimeElements(begin, appointmentsOfToday.get(0).getTimeB(), 2);
 
-            // get time between appointments
+//            // get time between appointments
             for (int i = 0; i < appointmentsOfToday.size() - 1; i++) {
-                blocks.add(new TimeElement(appointmentsOfToday.get(i).getTimeE(), appointmentsOfToday.get(i + 1).getTimeB()));
+                Time time1 = Time.valueOf(appointmentsOfToday.get(i).getTimeE().toLocalTime());
+                time1.setTime(time1.getTime() + 1800000);
+                Time time2 = Time.valueOf(appointmentsOfToday.get(i + 1).getTimeB().toLocalTime());
+                generateTimeElements(time1, time2,2);
             }
-
-            // get time between last task and end
-            blocks.add(new TimeElement(appointmentsOfToday.get(appointmentsOfToday.size() - 1).getTimeE(), end));
+//
+//            // get time between last task and end
+            Time time1 = Time.valueOf(appointmentsOfToday.get(appointmentsOfToday.size() - 1).getTimeE().toLocalTime());
+            time1.setTime(time1.getTime() + 1800000);
+            generateTimeElements(time1, end,2);
         }else{
-            blocks.add(new TimeElement(begin,end));
+            generateTimeElements(begin,end,2);
+        }
+        System.out.println("ss");
+
+    }
+
+    public void generateTimeElements(Time begin, Time end, int duration){
+        Time time = Time.valueOf(begin.toLocalTime());
+        Time time2 = Time.valueOf(begin.toLocalTime());
+        time2.setTime(time2.getTime() + 7200000);
+        while (time2.compareTo(end) < 0){
+            blocks.add(new TimeElement(Time.valueOf(time.toLocalTime()), Time.valueOf(time2.toLocalTime())));
+            time.setTime(time.getTime() + 7200000);
+            time2.setTime(time2.getTime() + 7200000);
         }
     }
 
-    public ArrayList<Appointment> getAppointmentsOfToday() {
-        return appointmentsOfToday;
-    }
 
     public LocalDate getDate() {
         return date;

@@ -46,18 +46,21 @@ public class AddTask {
         //TODO give taskBlocks a subtask
         //TODO load all data in database
         tasks.sort(Comparator.comparing(task -> task.getDeadline()));
+        days.forEach((key, value)->{
+            value.getFreeTimeBlocks(new Time(5,0,0), new Time(20,0,0));
+        });
         tasks.forEach(task -> {
-            ArrayList<Taskblock> blocks = task.getTaskBocks();
+            ArrayList<Taskblock> taskElement = task.getTaskBocks();
             HashMap<LocalDate , Day> prepDays = getDaysWithLowestScore(task.getDeadline());
-            while (blocks.size() != 0){
-                for(int i = 0; i < blocks.size(); i++){
+            while (taskElement.size() != 0){
+                for(int i = 0; i < taskElement.size(); i++){
                     if (prepDays.size() == 0) prepDays = getDaysWithLowestScore(task.getDeadline());
                     Day day  =  getRandomDay(prepDays);
-                    day.getTimeElements(new Time(5,0,0), new Time(20,0,0));
                     TimeElement element = day.getTimeElement();
-                    day.addTask(blocks.get(0), element.getTimeB(), element.getTimeE());
+                    day.addTask(taskElement.get(0), element.getTimeB(), element.getTimeE());
                     day.addscore(120);
-                    blocks.remove(0);
+                    taskElement.remove(0);
+                    System.out.println(i);
                 }
             }
         });

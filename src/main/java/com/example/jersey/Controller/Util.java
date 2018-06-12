@@ -94,5 +94,10 @@ public class Util {
         return date;
     }
 
+    public static Time applyOffset(Time time, int offset){
+        time.setTime(time.getTime() + (offset * 500 * 60));
+        return time;
+    }
+
 
 }

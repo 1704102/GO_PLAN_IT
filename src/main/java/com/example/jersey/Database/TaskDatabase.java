@@ -106,7 +106,7 @@ public class TaskDatabase extends DatabaseHelper {
                     object.put("deadline", "");
                     object.put("time", "");
                 }
-                array.put(object.put("tasks", getSubTasks(input, s.getInt("id"))));
+                array.put(object.put("tasks", getSubTasks(s.getInt("id"))));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class TaskDatabase extends DatabaseHelper {
         return array;
     }
 
-    public JSONArray getSubTasks(JSONObject input, int id){
+    public JSONArray getSubTasks(int id){
         JSONArray output = new JSONArray();
         try{
             PreparedStatement preparedStatement1 = connection.prepareStatement("select * from subtask where task_id = ?");

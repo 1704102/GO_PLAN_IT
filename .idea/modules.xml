@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GO PLAN IT.iml" filepath="$PROJECT_DIR$/GO PLAN IT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.example.jersey.iml" filepath="$PROJECT_DIR$/com.example.jersey.iml" />
     </modules>
   </component>
 </project>

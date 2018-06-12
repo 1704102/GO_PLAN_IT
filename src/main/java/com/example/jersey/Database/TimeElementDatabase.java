@@ -2,13 +2,17 @@ package com.example.jersey.Database;
 
 import com.example.jersey.Controller.Controller;
 import com.example.jersey.Controller.Util;
+import com.example.jersey.Model.HoldingElement.Taskblock;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 
 public class TimeElementDatabase extends DatabaseHelper{
 
@@ -120,6 +124,25 @@ public class TimeElementDatabase extends DatabaseHelper{
         try {
             PreparedStatement statement = connection.prepareStatement("delete a from time_element as a left join subtask as b on a.subtask_id = b.id left join task as c on b.task_id = c.id where c.user_id = ?");
             statement.setInt(1, token);
+            statement.execute();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        disconnect();
+    }
+
+    public void addTimeElements(LocalDate day, Taskblock taskblock){
+        connect();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("insert into time_element (timeB, timeE, subtask_id) values (?,?,?)");
+            taskblock.setStartTime(new Time(taskblock.getStartTime().getTime() + 7200000));
+            taskblock.setEndTime(new Time(taskblock.getEndTime().getTime() + 7200000));
+            LocalDateTime dateS = LocalDateTime.of(day, taskblock.getStartTime().toLocalTime());
+            LocalDateTime dateE = LocalDateTime.of(day, taskblock.getEndTime().toLocalTime());
+            statement.setTimestamp(1, Timestamp.valueOf(dateS));
+            statement.setTimestamp(2, Timestamp.valueOf(dateE));
+            statement.setInt(3, taskblock.getSubtask().getId());
             statement.execute();
         }catch (Exception e){
             e.printStackTrace();

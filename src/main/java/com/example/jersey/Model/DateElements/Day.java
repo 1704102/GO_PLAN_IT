@@ -14,8 +14,14 @@ public class Day {
     public ArrayList<Taskblock> tasksofday  = new ArrayList();
     public ArrayList<Appointment> appointmentsOfToday  = new ArrayList();
     public Day(){}
+    public ArrayList<TimeElement> blocks;
 
-    public void AddTaskBlock(Taskblock t) {
+
+    public void AddTaskBlock(Taskblock t, Time begin, Time end) {
+
+        t.setStartTime(blocks.get(0).getTimeB());
+        t.setEndTime(blocks.get(0).getTimeE());
+        blocks.remove(0);
         tasksofday.add(t);
     }
 
@@ -24,32 +30,41 @@ public class Day {
         date = date1;
     }
 
-    public Taskblock getTaskBlock(Time begin, Time end, int duration){
+    public void addTask(Taskblock element, Time start, Time end){
+        element.setStartTime(start);
+        element.setEndTime(end);
+        tasksofday.add(element);
+    }
+
+    public TimeElement getTimeElement(){
 
         // sort task on begin time
         appointmentsOfToday.sort(Comparator.comparing(o -> o.getTimeB()));
 
-        ArrayList<TimeElement> blocks = getTimeElements(begin,end);
+        TimeElement el = blocks.get(0);
+        blocks.remove(0);
 
-        return null;
+        return el;
     }
 
-    ArrayList<TimeElement> getTimeElements(Time begin, Time end){
-        ArrayList<TimeElement> list = new ArrayList<>();
+    public void getTimeElements(Time begin, Time end){
+        blocks = new ArrayList<>();
         appointmentsOfToday.sort(Comparator.comparing(o -> o.getTimeB()));
+        if (appointmentsOfToday.size() > 0) {
 
-        // get time between begin and first task
-        list.add(new TimeElement(begin,appointmentsOfToday.get(0).getTimeB()));
+            // get time between begin and first task
+            blocks.add(new TimeElement(begin, appointmentsOfToday.get(0).getTimeB()));
 
-        // get time between appointments
-        for(int i = 0; i < appointmentsOfToday.size() -1; i++){
-            list.add(new TimeElement(appointmentsOfToday.get(i).getTimeE(), appointmentsOfToday.get(i+1).getTimeB()));
+            // get time between appointments
+            for (int i = 0; i < appointmentsOfToday.size() - 1; i++) {
+                blocks.add(new TimeElement(appointmentsOfToday.get(i).getTimeE(), appointmentsOfToday.get(i + 1).getTimeB()));
+            }
+
+            // get time between last task and end
+            blocks.add(new TimeElement(appointmentsOfToday.get(appointmentsOfToday.size() - 1).getTimeE(), end));
+        }else{
+            blocks.add(new TimeElement(begin,end));
         }
-
-        // get time between last task and end
-        list.add(new TimeElement(appointmentsOfToday.get(appointmentsOfToday.size()-1).getTimeE(), end));
-
-        return list;
     }
 
     public ArrayList<Appointment> getAppointmentsOfToday() {
@@ -73,6 +88,10 @@ public class Day {
         appointmentsOfToday.forEach(appointment -> {
             dayscore += appointment.getDuration();
         });
+    }
+
+    public ArrayList<Taskblock> getTasksofday() {
+        return tasksofday;
     }
 
     public String toString() {

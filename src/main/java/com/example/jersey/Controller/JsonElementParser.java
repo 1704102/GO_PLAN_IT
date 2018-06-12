@@ -73,6 +73,7 @@ public class JsonElementParser {
     }
 
     private static SubTask parseSubTask(JSONObject input){
+        int id = input.getInt("id");
         String name = input.getString("name");
         Date date = new Date();
         try {
@@ -82,7 +83,7 @@ public class JsonElementParser {
         boolean finished = input.getBoolean("done");
         int estimate = input.getInt("hours");
 
-        SubTask subTask = new SubTask(name, dat2, estimate, finished);
+        SubTask subTask = new SubTask(id,name, dat2, estimate, finished);
         return subTask;
     }
 

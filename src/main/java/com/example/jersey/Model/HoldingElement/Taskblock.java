@@ -15,7 +15,8 @@ public class Taskblock {
 
 
     public Taskblock(Task task) {
-
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.task=task;
     }
 

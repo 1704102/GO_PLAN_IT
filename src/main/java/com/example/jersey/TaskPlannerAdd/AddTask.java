@@ -9,11 +9,15 @@ import com.example.jersey.Controller.Util;
 import com.example.jersey.Database.TaskDatabase;
 import com.example.jersey.Database.TimeElementDatabase;
 import com.example.jersey.Model.DateElements.Day;
+import com.example.jersey.Model.HoldingElement.SubTask;
 import com.example.jersey.Model.HoldingElement.Task;
 import com.example.jersey.Model.HoldingElement.Taskblock;
 import com.example.jersey.Model.TimeElements.TimeElement;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.omg.CORBA.TIMEOUT;
+
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -38,6 +42,9 @@ public class AddTask {
         System.out.println(tasks);
 
         //TODO plan task into days
+        //TODO except last 5 days
+        //TODO give taskBlocks a subtask
+        //TODO load all data in database
         tasks.sort(Comparator.comparing(task -> task.getDeadline()));
         tasks.forEach(task -> {
             ArrayList<Taskblock> blocks = task.getTaskBocks();
@@ -46,29 +53,41 @@ public class AddTask {
                 for(int i = 0; i < blocks.size(); i++){
                     if (prepDays.size() == 0) prepDays = getDaysWithLowestScore(task.getDeadline());
                     Day day  =  getRandomDay(prepDays);
-                    day.tasksofday.add(blocks.get(0));
+                    day.getTimeElements(new Time(5,0,0), new Time(20,0,0));
+                    TimeElement element = day.getTimeElement();
+                    day.addTask(blocks.get(0), element.getTimeB(), element.getTimeE());
                     day.addscore(120);
                     blocks.remove(0);
                 }
             }
         });
-
-        days.forEach((key, value)->{
-            value.tasksofday.forEach(taskBlock->{
-                tasks.forEach(task->{
-                    if (taskBlock.getTask().getName().equals(task.getName())){
-
-                    }
-                });
-            });
-        });
-
         TimeElementDatabase database = new TimeElementDatabase();
         database.resetTimeElements(Controller.getUser(input.getString("token")).getId());
 
 
+        days.forEach((key, value)->{
+            value.getTasksofday().forEach(taskblock -> {
+                tasks.forEach(task->{
+                    if (taskblock.getTask().getName().equals(task.getName())){
+                        for(SubTask subTask : task.getSubTasks()){
+                            if (subTask.getEstimatedHours() > 0) {
+                                taskblock.setSubtask(subTask);
+                                subTask.setEstimatedHours(subTask.getEstimatedHours() - 2);
+                                database.addTimeElements(key,taskblock);
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
+        });
+//
+
     }
 
+    public void planDays(){
+
+    }
 
     public Day getRandomDay (HashMap<LocalDate, Day> e) {
         Random rand = new Random();

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 public class SubTask {
 
+    private int id;
     private String name;
     private LocalDate deadline;
 
@@ -12,7 +13,8 @@ public class SubTask {
 
     private boolean finished;
 
-    public SubTask(String name, LocalDate deadline, int estimatedHours, boolean finished) {
+    public SubTask(int id,String name, LocalDate deadline, int estimatedHours, boolean finished) {
+        this.id = id;
         this.name = name;
         this.deadline = deadline;
         this.estimatedHours = estimatedHours;
@@ -49,5 +51,9 @@ public class SubTask {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -29,6 +29,6 @@ public class TimeElement {
 
     //get duration of timeElement in minutes
     public long getDuration(){
-        return (timeB.getTime() - timeE.getTime())/1000/60;
+        return (timeE.getTime() - timeB.getTime())/1000/60/60;
     }
 }

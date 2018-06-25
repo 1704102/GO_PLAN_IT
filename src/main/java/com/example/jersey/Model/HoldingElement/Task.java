@@ -28,9 +28,9 @@ public class Task {
         return total;
     }
 
-    public ArrayList<Taskblock> getTaskBocks(){
+    public ArrayList<Taskblock> getTaskBocks(int duration){
         ArrayList<Taskblock> taskBlocks = new ArrayList<>();
-        int temp = (int) Math.ceil((double)getTotalEstimatedHours() / 2);;
+        int temp = (int) Math.ceil((double)getTotalEstimatedHours() / duration);;
         for(int i = 0; i < temp; i++){
             taskBlocks.add(new Taskblock(this));
         }
@@ -59,5 +59,13 @@ public class Task {
 
     public void setSubTasks(ArrayList<SubTask> subTasks) {
         this.subTasks = subTasks;
+    }
+
+    public int getTotalHours() {
+        int totalHours = 0;
+        for (SubTask subTask: subTasks){
+            totalHours += subTask.getEstimatedHours();
+        }
+        return totalHours;
     }
 }

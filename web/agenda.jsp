@@ -26,7 +26,7 @@
         </div>
         <div class="timeTable">
             <div id="tableHeader">
-            </div><script>fillTable()</script>
+
         </div>
         <div class="overlay">
             <div class="day" id="0"></div>
@@ -39,6 +39,7 @@
         </div>
     </div>
 </div>
+</div><script>fillTable()</script>
 </body>
 </html>
 

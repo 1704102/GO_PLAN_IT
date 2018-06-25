@@ -24,6 +24,8 @@ import java.util.*;
 
 public class AddTask {
 
+    public final int DURATION = 2;
+
     LocalDate today = LocalDate.now();
     HashMap<LocalDate, Day> days;
 
@@ -39,24 +41,45 @@ public class AddTask {
 
     public void planTasks(JSONObject input){
         ArrayList<Task> tasks = JsonElementParser.parseTaskArray(input, Integer.parseInt(input.getString("timeOffset")));
-        System.out.println(tasks);
-
-        //TODO plan task into days
-        //TODO except last 5 days
-        //TODO give taskBlocks a subtask
-        //TODO load all data in database
         tasks.sort(Comparator.comparing(task -> task.getDeadline()));
-        days.forEach((key, value)->{
-            value.getFreeTimeBlocks(new Time(5,0,0), new Time(20,0,0));
-        });
+        int totalHours = 0;
+
+        Iterator it = days.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Day day = (Day) pair.getValue();
+            day.getFreeTimeBlocks(new Time(10,0,0), new Time(22,0,0), DURATION);
+            totalHours += day.getFreeTimeDuration();
+        }
+
+        if (checkTotalAmountOfHours(totalHours, tasks)) {
+            planTasks(tasks);
+            setSubTasks(tasks, input.getString("token"));
+        }
+    }
+
+    public boolean checkTotalAmountOfHours(int totalFree, ArrayList<Task> tasks){
+        int totalTasks = 0;
+        for(Task task : tasks){
+            totalTasks += task.getTotalHours();
+        }
+        if (totalTasks>totalFree){
+            System.out.println("too much hours");
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public void planTasks(ArrayList<Task> tasks){
         tasks.forEach(task -> {
-            ArrayList<Taskblock> taskElement = task.getTaskBocks();
+            ArrayList<Taskblock> taskElement = task.getTaskBocks(DURATION);
             HashMap<LocalDate , Day> prepDays = getDaysWithLowestScore(task.getDeadline());
             while (taskElement.size() != 0){
                 for(int i = 0; i < taskElement.size(); i++){
                     if (prepDays.size() == 0) prepDays = getDaysWithLowestScore(task.getDeadline());
                     Day day  =  getRandomDay(prepDays);
-                    TimeElement element = day.getTimeElement();
+                    TimeElement element = day.getTimeElement(day.blocks.size()/2);
                     day.addTask(taskElement.get(0), element.getTimeB(), element.getTimeE());
                     day.addscore(120);
                     taskElement.remove(0);
@@ -64,9 +87,11 @@ public class AddTask {
                 }
             }
         });
-        TimeElementDatabase database = new TimeElementDatabase();
-        database.resetTimeElements(Controller.getUser(input.getString("token")).getId());
+    }
 
+    public void setSubTasks(ArrayList<Task> tasks, String token){
+        TimeElementDatabase database = new TimeElementDatabase();
+        database.resetTimeElements(Controller.getUser(token).getId());
 
         days.forEach((key, value)->{
             value.getTasksofday().forEach(taskblock -> {
@@ -84,8 +109,6 @@ public class AddTask {
                 });
             });
         });
-//
-
     }
 
     public void planDays(){

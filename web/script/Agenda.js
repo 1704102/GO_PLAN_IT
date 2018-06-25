@@ -9,26 +9,34 @@ function sleep(milliseconds) {
         }
     }
 }
-function fillTable() {
+function setCurrentTime() {
+    var now = new Date();
+    if(now.getDate() == DATE.getDate()){
+        var day111 = now.getDay() - 1;
+        $("#" + day111).css("background-color", '#ff06');
+        if($("#timeDiv").length == 0 ){
+            $("#" + day111).append("<div id='timeDiv'></div>");
+        }
+        $("#timeDiv").css("top", ((now.getHours() * 60) + now.getMinutes()) * (30  /60) - 5.0 + "px");
+        setTimeout(arguments.callee, 30000);
+    }else{
+        var day111 = now.getDay() - 1;
+        $("#" + day111).css("background-color", 'rgba(181, 181, 181, 0.18)');
+    }
+
+}
+
+    function fillTable() {
+    setCurrentTime();
     fillHours();
     fillHeader();
     fillDays();
+
+
 }
 
 function fillDays() {
-   // var input = JSON.parse("{}");
-   // input["date"] = DATE.getTime();
-   // input["timeOffset"] = DATE.getTimezoneOffset().toString();
-   // input["token"] = sessionStorage.getItem("token");
-   //
-   // var output = postCall(input, 'rest/agenda', 'json');
-   // console.log(output);
-   //  for (var data = 0; data < output.length; data++){
-   //      if (output.hasOwnProperty(data)){
-   //          console.log(output[data]);
-   //          addTimeElement(output[data])
-   //      }
-   //  }
+
     $.ajax({
         type: 'POST',
         url: 'rest/agenda',
@@ -94,6 +102,7 @@ function emptyDays() {
     $("#4").empty();
     $("#5").empty();
     $("#6").empty();
+    setCurrentTime();
 }
 
 function addTimeElement(task){

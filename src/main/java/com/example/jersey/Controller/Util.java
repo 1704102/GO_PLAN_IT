@@ -11,6 +11,8 @@ import java.util.Random;
 
 public class Util {
 
+    public final static long HOUR = 3600000;
+
     public static Calendar createCalender(long x) {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(x));

@@ -34,10 +34,25 @@ function fillAppointmentTable(data) {
             "<td>" + appointment.date + "</td>" +
             "<td>" + appointment.timeB + "</td>" +
             "<td>" + appointment.timeE + "</td>" +
-            "<td><img src='css/images/button/edit.jpg' width='20' height='20'></td>" +
+            "<td><img src='css/images/button/edit.jpg' width='20' onclick='getAppointment("+ appointment.id +")' height='20'></td>" +
             "<td><img class='delete' src='css/images/button/remove.png' onclick='deleteAppointment(" + JSON.stringify(appointment) + ")' width='20' height='20'></td>" +
             "</tr>");
     }
+}
+
+function getAppointment(id) {
+    var input = JSON.parse("{}");
+    var date = new Date();
+    input["id"] = id;
+    input["timeOffset"] = date.getTimezoneOffset().toString();
+    var appointment = postCall(input, 'rest/appointment', 'json');
+    console.log(appointment);
+
+    openAddAppointment();
+    $("#appointment-name").val(appointment.name);
+    $("#appointment-date").val(appointment.date);
+    $("#appointment-timeB").val(appointment.timeB);
+    $("#appointment-timeE").val(appointment.timeE);
 }
 
 function selectTasks() {

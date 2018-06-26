@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 public class Controller {
 
-    public static ArrayList<User> users;
+    private static ArrayList<User> users;
 
     public Controller(){
         users = new ArrayList<>();

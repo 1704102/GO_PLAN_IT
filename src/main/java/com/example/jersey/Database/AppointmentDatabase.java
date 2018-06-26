@@ -2,15 +2,12 @@ package com.example.jersey.Database;
 
 import com.example.jersey.Controller.Controller;
 import com.example.jersey.Controller.Util;
-import com.example.jersey.Appointment.Appointment;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class AppointmentDatabase extends DatabaseHelper {
 
@@ -76,21 +73,34 @@ public class AppointmentDatabase extends DatabaseHelper {
         disconnect();
     }
 
-//    public Appointment parseJSonObject(JSONObject object) {
-//        String name = object.getString("name");
-//        String timeB = object.getString("timeB");
-//        String timeE = object.getString("timeE");
-//        String dateString = object.getString("date");
-//        LocalDate date = Util.stringToDate(dateString);
-//        return new Appointment(name, timeB, timeE, date);
-//    }
-//
-//    public List<Appointment> parseJSONArrayList(JSONArray array) {
-//        List<Appointment> appointments = new ArrayList<>();
-//
-//        for (Object object : array) {
-//            appointments.add(parseJSonObject((JSONObject) object));
-//        }
-//        return appointments;
-//    }
+    public JSONObject getAppointment(int id, String timeOffset) {
+        connect();
+        JSONObject appointment = new JSONObject();
+        try {
+            PreparedStatement statement = connection.prepareStatement("select * from appointment where id = ?");
+            statement.setInt(1,id);
+            ResultSet s = statement.executeQuery();
+            while (s.next()){
+                appointment.put("name", s.getString("name"));
+                appointment.put("timeB", Util.getTime(s.getTime("timeB"), timeOffset));
+                appointment.put("timeE", Util.getTime(s.getTime("timeE"), timeOffset));
+                if (s.getDate("date") != null){
+                    appointment.put("date", LocalDate.parse(Util.DateToString(Util.createCalender(s.getDate("date").getTime()))));
+                }else {
+                    String repeating = s.getString("repeating");
+                    String[] split = repeating.split(",");
+                    int[] repeat = new int[split.length];
+                    for( int i = 0; i < split.length; i++){
+                       repeat[i] = Util.dayToInt(split[i]);
+                    }
+                    appointment.put("repeating", repeat);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        disconnect();
+        return appointment;
+    }
+
 }

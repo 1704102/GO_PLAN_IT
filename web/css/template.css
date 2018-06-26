@@ -99,6 +99,7 @@ table tr th{
     width: calc(100%/7 - 0.5px);
     height: 3px;
     background-color: green;
+    z-index: 1;
 }
 
 .today{
@@ -117,6 +118,7 @@ table tr th{
     position: absolute;
     width: calc(100%/7 - 0.5px);
     color: white;
+    z-index: 0;
 }
 .task{
     background-color: rgb(255, 0, 0);

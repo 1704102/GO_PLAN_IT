@@ -11,28 +11,43 @@ function sleep(milliseconds) {
 }
 function setCurrentTime() {
     var now = new Date();
-    if(now.getDate() == DATE.getDate()){
+    var temp = new Date();
+    temp.setDate(now.getDate() - now.getDay() + 1);
+    DATE.setDate(DATE.getDate() - DATE.getDay() + 1);
+
+    if(temp.getDate() == DATE.getDate()){
         var day111 = now.getDay() - 1;
+
         $("#" + day111).css("background-color", '#ff06');
         if($("#timeDiv").length == 0 ){
             $("#" + day111).append("<div id='timeDiv'></div>");
         }
-        $("#timeDiv").css("top", ((now.getHours() * 60) + now.getMinutes()) * (30  /60) - 5.0 + "px");
-        setTimeout(arguments.callee, 30000);
+        console.log(now.getHours() + " " + now.getMinutes());
+        $("#timeDiv").css("top", ((now.getHours() * 60) + now.getMinutes()) * (29.8  /60) + 18.0 + "px");
+
     }else{
         var day111 = now.getDay() - 1;
         $("#" + day111).css("background-color", 'rgba(181, 181, 181, 0.18)');
     }
-
+    setTimeout(setCurrentTime, 30000);
 }
 
     function fillTable() {
     setCurrentTime();
+
     fillHours();
     fillHeader();
     fillDays();
 
 
+}
+
+function generate() {
+    var input = JSON.parse("{}");
+    input['token']= sessionStorage.getItem("token");
+    var date = new Date();
+    input["timeOffset"] = date.getTimezoneOffset().toString();
+    postCall(input, 'rest/agenda/generate', 'json');
 }
 
 function fillDays() {
@@ -47,7 +62,6 @@ function fillDays() {
         success: function(data){
             console.log(data);
             for (var day in data){
-                console.log(data[day]);
                 addTimeElement(data[day])
             }
         }

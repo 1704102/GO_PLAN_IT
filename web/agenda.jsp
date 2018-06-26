@@ -18,6 +18,7 @@
 </div>
 
 <div class="content">
+    <input type="button" value="generate", onclick="generate()">
     <div class="Agenda">
         <div id="utilHeader">
             <input type="button" onclick="previousWeek()" value="previous">

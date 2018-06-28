@@ -49,10 +49,18 @@ function getAppointment(id) {
     console.log(appointment);
 
     openAddAppointment();
+    $("#appointment-id").empty();
+    $("#appointment-id").val(appointment.id)  ;
     $("#appointment-name").val(appointment.name);
     $("#appointment-date").val(appointment.date);
     $("#appointment-timeB").val(appointment.timeB);
     $("#appointment-timeE").val(appointment.timeE);
+
+    var array = $(".day");
+    console.log(appointment.repeating);
+    for (var i in appointment.repeating){
+        $(array[appointment.repeating[i]]).attr("foo", "true");
+    }
 }
 
 function selectTasks() {

@@ -24,6 +24,15 @@ public class Appointment {
         appointmentDatabase.addAppointment(appointment);
     }
 
+    @Path("/alter")
+    @Consumes("application/json")
+    @PUT
+    public void alterAppointment(String x){
+        JSONObject object = new JSONObject(x);
+        AppointmentDatabase database = new AppointmentDatabase();
+        database.alterAppointment(object);
+    }
+
     @DELETE
     @Consumes("application/json")
     public void deleteAppointment(String x) {

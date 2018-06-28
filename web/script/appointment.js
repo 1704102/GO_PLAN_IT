@@ -18,6 +18,20 @@ function addAppointment() {
     getAppointments();
 }
 
+function alterAppointment() {
+    var data = JSON.parse("{}");
+    data["name"] = $("#appointment-name").val();
+    data["id"] = parseInt($("#appointment-id").val());
+    data["timeB"] = $("#appointment-timeB").val();
+    data["timeE"] = $("#appointment-timeE").val();
+    data["date"] = $("#appointment-date").val();
+    data["repeating"] = getRepeating();
+
+    putCall(data, 'rest/appointment/alter');
+    sleep(1000);
+    getAppointments();
+}
+
 function deleteAppointment(appointment) {
     if (confirm("Are you sure?")) {
         input = JSON.parse("{}");

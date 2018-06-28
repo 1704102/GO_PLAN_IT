@@ -46,6 +46,7 @@
 <div id="addAppointment" class="overlay">
     <div id="appointmentInput" class="inputContainer">
         <div style="border-bottom: 1px solid black; text-align: center; font-size: 30px;">Appointment   <img src="css/images/button/remove.png" width="30px" height="30px;" onclick="closeAddAppointmnt()"></div>
+        <div id="appointment-id" style="display: none"></div>
         <div class="input">
             <div>Name</div>
             <div><input type="text" id="appointment-name"></div>
@@ -74,6 +75,7 @@
             </div>
         </div>
         <div class="button"><input id="sendAppointment" type="button" value="send" onclick="addAppointment()"></div>
+        <div class="button"><input id="alterAppointment" type="button" value="save" onclick="alterAppointment()"></div>
     </div>
 </div>
 <div id="addTask" class="overlay">

@@ -61,6 +61,32 @@ public class AppointmentDatabase extends DatabaseHelper {
         return array;
     }
 
+    public void alterAppointment(JSONObject appointment) {
+        connect();
+        try {
+            if (appointment.getString("date").equals("")) {
+                PreparedStatement preparedStatement = connection.prepareStatement("update appointment set name = ?, timeB = TIME(?), timeE = TIME(?), repeating = ? where id  = ?");
+                preparedStatement.setString(1, appointment.getString("name"));
+                preparedStatement.setString(2, appointment.getString("timeB"));
+                preparedStatement.setString(3, appointment.getString("timeE"));
+                preparedStatement.setString(4, appointment.getString("repeating"));
+                preparedStatement.setInt(5, appointment.getInt("id"));
+                preparedStatement.execute();
+            } else {
+                PreparedStatement preparedStatement = connection.prepareStatement("update appointment set name = ?, timeB = TIME(?), timeE = TIME(?), date = STR_TO_DATE(?,'%Y-%m-%d') where id  = ?");
+                preparedStatement.setString(1, appointment.getString("name"));
+                preparedStatement.setString(2, appointment.getString("timeB"));
+                preparedStatement.setString(3, appointment.getString("timeE"));
+                preparedStatement.setString(4, appointment.getString("date"));
+                preparedStatement.setInt(5, appointment.getInt("id"));
+                preparedStatement.execute();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+    }
+
     public void deleteAppointment(int id) {
         connect();
         try {
@@ -81,6 +107,7 @@ public class AppointmentDatabase extends DatabaseHelper {
             statement.setInt(1,id);
             ResultSet s = statement.executeQuery();
             while (s.next()){
+                appointment.put("id", s.getInt("id"));
                 appointment.put("name", s.getString("name"));
                 appointment.put("timeB", Util.getTime(s.getTime("timeB"), timeOffset));
                 appointment.put("timeE", Util.getTime(s.getTime("timeE"), timeOffset));

@@ -14,7 +14,6 @@ function toggleMenu(){
     }
 }
 
-
 function postCall(input, rest, dataType) {
     var output = "";
     $.ajax({

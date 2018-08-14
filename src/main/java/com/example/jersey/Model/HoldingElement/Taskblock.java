@@ -1,77 +1,60 @@
 package com.example.jersey.Model.HoldingElement;
 
+import java.sql.Time;
 import java.util.Date;
 
 
 import java.util.Date;
 
 public class Taskblock {
-    private int startTime;
-    private int endTime;
-    private Date date;
-    private int duration;
-    private String taskname;
-    private String subtask;
+    private Time startTime;
+    private Time endTime;
+
+    private Task task;
+    private SubTask subtask;
 
 
-    public Taskblock(Date start, int startime, int endtime, String taskname) {
-
-        date= start;
-        startTime= startime;
-        endTime=endtime;
-        this.taskname=taskname;
-        duration = (endTime-startTime)/100;
+    public Taskblock(Task task) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.task=task;
     }
 
-    public int getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(int startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
-    public int getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(int endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
     }
 
-    public Date getDate() {
-        return date;
+
+    public Task getTask() {
+        return task;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public String getTaskname() {
-        return taskname;
-    }
-
-    public void setTaskname(String taskname) {
-        this.taskname = taskname;
-    }
-
-    public String getSubtask() {
+    public SubTask getSubtask() {
         return subtask;
     }
 
-    public void setSubtask(String subtask) {
+    public void setSubtask(SubTask subtask) {
         this.subtask = subtask;
     }
+
     public String toString() {
 
-        return "\n"+taskname+date.toString();
+        return "\n";
     }
 }

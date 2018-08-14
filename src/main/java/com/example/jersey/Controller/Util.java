@@ -11,6 +11,8 @@ import java.util.Random;
 
 public class Util {
 
+    public final static long HOUR = 3600000;
+
     public static Calendar createCalender(long x) {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date(x));
@@ -92,6 +94,11 @@ public class Util {
         LocalDate date = LocalDate.parse(string, formatter);
         System.out.println(date); // 2010-01-02
         return date;
+    }
+
+    public static Time applyOffset(Time time, int offset){
+        time.setTime(time.getTime() + (offset * 500 * 60));
+        return time;
     }
 
 

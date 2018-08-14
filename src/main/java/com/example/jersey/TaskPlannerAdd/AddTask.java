@@ -1,176 +1,201 @@
 package com.example.jersey.TaskPlannerAdd;
 
 import com.example.jersey.Appointment.Appointment;
+import com.example.jersey.Appointment.DateAppointment;
+import com.example.jersey.Appointment.RepeatingAppointment;
+import com.example.jersey.Controller.Controller;
 import com.example.jersey.Controller.JsonElementParser;
 import com.example.jersey.Controller.Util;
+import com.example.jersey.Database.TaskDatabase;
 import com.example.jersey.Database.TimeElementDatabase;
 import com.example.jersey.Model.DateElements.Day;
+import com.example.jersey.Model.HoldingElement.SubTask;
 import com.example.jersey.Model.HoldingElement.Task;
 import com.example.jersey.Model.HoldingElement.Taskblock;
+import com.example.jersey.Model.TimeElements.TimeElement;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.omg.CORBA.TIMEOUT;
 
-import java.time.Instant;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class AddTask {
-    private ArrayList<Taskblock> generatedtasks = new ArrayList();
-    //ArrayList actitvities()
-    private Calendar today = Util.createCalender(Instant.now().toEpochMilli());
 
-    public ArrayList<Taskblock> getGeneratedtasks() {
-        return generatedtasks;
+    public final int DURATION = 2;
+
+    LocalDate today = LocalDate.now();
+    HashMap<LocalDate, Day> days;
+
+    public void GeneratePlanning(JSONObject input){
+        LocalDate futureDate = LocalDate.of(2018,8,20);
+        String token = input.getString("token");
+        String offset = input.getString("timeOffset");
+
+        days = fillDays(futureDate,getRepAppointments(token,offset),token,offset);
+
+        planTasks(input);
     }
 
-    public void AddnewTask(Date startDate, Date end, int plannedhours, String taskname) {
-        ArrayList<Day> days = listOfDays(startDate, end);
-        /**
-         // DONE (getDaysUntilDeadline): get all days starting from current day until due date of task,
-         // DONE (addAppointments): and for all the days get the times of the activities on set day and
-         // all the repeating tasks. then give the day a score(bonus points on weekend 1 point)
-         // and a higher score in the last quarter of the project time(15 bonus points)
+    public void planTasks(JSONObject input){
+        ArrayList<Task> tasks = JsonElementParser.parseTaskArray(input, Integer.parseInt(input.getString("timeOffset")));
+        tasks.sort(Comparator.comparing(task -> task.getDeadline()));
+        int totalHours = 0;
 
-         // check if the amount of free time is enough to plan the task.
+        Iterator it = days.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Day day = (Day) pair.getValue();
+            day.getFreeTimeBlocks(new Time(10,0,0), new Time(22,0,0), DURATION);
+            totalHours += day.getFreeTimeDuration();
+        }
 
-         // find the day with the least points
-         // from the data base get the free time hours
-         // place a time block there on a free time space.
-         */
-        placeTask(days, plannedhours, taskname);
+        if (checkTotalAmountOfHours(totalHours, tasks)) {
+            planTasks(tasks);
+            setSubTasks(tasks, input.getString("token"));
+        }
+    }
+
+    public boolean checkTotalAmountOfHours(int totalFree, ArrayList<Task> tasks){
+        int totalTasks = 0;
+        for(Task task : tasks){
+            totalTasks += task.getTotalHours();
+        }
+        if (totalTasks>totalFree){
+            System.out.println("too much hours");
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    public void planTasks(ArrayList<Task> tasks){
+        tasks.forEach(task -> {
+            ArrayList<Taskblock> taskElement = task.getTaskBocks(DURATION);
+            HashMap<LocalDate , Day> prepDays = getDaysWithLowestScore(task.getDeadline());
+            while (taskElement.size() != 0){
+                for(int i = 0; i < taskElement.size(); i++){
+                    if (prepDays.size() == 0) prepDays = getDaysWithLowestScore(task.getDeadline());
+                    Day day  =  getRandomDay(prepDays);
+                    TimeElement element = day.getTimeElement(day.blocks.size()/2);
+                    day.addTask(taskElement.get(0), element.getTimeB(), element.getTimeE());
+                    day.addscore(120);
+                    taskElement.remove(0);
+                    System.out.println(i);
+                }
+            }
+        });
+    }
+
+    public void setSubTasks(ArrayList<Task> tasks, String token){
+        TimeElementDatabase database = new TimeElementDatabase();
+        database.resetTimeElements(Controller.getUser(token).getId());
+
+        days.forEach((key, value)->{
+            value.getTasksofday().forEach(taskblock -> {
+                tasks.forEach(task->{
+                    if (taskblock.getTask().getName().equals(task.getName())){
+                        for(SubTask subTask : task.getSubTasks()){
+                            if (subTask.getEstimatedHours() > 0) {
+                                taskblock.setSubtask(subTask);
+                                subTask.setEstimatedHours(subTask.getEstimatedHours() - 2);
+                                database.addTimeElements(key,taskblock);
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    public void planDays(){
+
+    }
+
+    public Day getRandomDay (HashMap<LocalDate, Day> e) {
+        Random rand = new Random();
+        Set keyset = e.keySet();
+        int randI = rand.nextInt(keyset.size());
+        Day day = e.get(keyset.toArray()[randI]);
+        e.remove(keyset.toArray()[randI]);
+        return day;
     }
 
 
-    public ArrayList<Day> getDaysWithScore(ArrayList<Day> e, int dayscore) {
-        ArrayList<Day> days = new ArrayList<>();
-        for (Day day : e) {
-            if (day.getDayscore() == dayscore) {
-                days.add(day);
+    public HashMap<LocalDate, Day> fillDays(LocalDate end, HashMap<Integer, ArrayList<Appointment>> appointments, String token, String timeOffset){
+
+        HashMap<LocalDate, Day> days = new HashMap<>();
+        TimeElementDatabase database = new TimeElementDatabase();
+
+        for (LocalDate date = today; date.isBefore(end); date = date.plusDays(1)){
+            Day day = new Day(date);
+            if (date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7){
+                day.addscore(100);
             }
 
+            appointments.get(date.getDayOfWeek().getValue() - 1).forEach(app->{
+                day.appointmentsOfToday.add(app);
+            });
+
+            days.put(date, day);
         }
+        String timeB = Util.DateToString(Util.createCalender(Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime()));
+        String timeE = Util.DateToString(Util.createCalender(Date.from(end.atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime()));
+        database.getAppointmentsOnDate(new JSONArray(),timeB, timeE, token, timeOffset).forEach(appointment->{
+            DateAppointment appointment1 = JsonElementParser.parseDateAppointment((JSONObject) appointment);
+            days.get(appointment1.getDate()).addAppointment(appointment1);
+        });
+
+        days.forEach((key, value)->{
+            value.calculatePoints();
+        });
 
         return days;
     }
 
-    public ArrayList<Day> listOfDays(Date start, Date end) {
-        ArrayList<Day> makedays = new ArrayList();
-        Date daymaker = start;
-        while (!daymaker.equals(end)) {
-            if (!daymaker.equals(end)) {
-                Day day = new Day(daymaker);
-                makedays.add(day);
-                Calendar c = Calendar.getInstance();
-                c.setTime(daymaker);
+    public HashMap<Integer, ArrayList<Appointment>> getRepAppointments(String token, String timeOffset){
+        TimeElementDatabase database = new TimeElementDatabase();
+        HashMap<Integer, ArrayList<Appointment>> appointments = new HashMap();
 
-                c.add(Calendar.DATE, 1);
-
-                daymaker = c.getTime();
-            }
+        for(int i =0; i < 7; i++){
+            appointments.computeIfAbsent(i, k -> new ArrayList<>());
         }
-        return makedays;
+
+        database.getAppointmentsOnRepeat(new JSONArray(),token,timeOffset).forEach(appointment->{
+            RepeatingAppointment appointment1 = (JsonElementParser.parseRepeatingAppointment((JSONObject) appointment));
+            appointments.get(appointment1.getRepeating()).add(appointment1);
+        });
+
+        return appointments;
     }
 
-    public void placeTask(ArrayList<Day> Alldays, int plannedHours, String taskname) {
+    public HashMap<LocalDate, Day> getDaysWithLowestScore(LocalDate deadline){
+        HashMap<LocalDate, Day> output = new HashMap<>();
 
-        int x = 100000;
-        for (Day d : Alldays) {
-            if (d.getDayscore() < x) {
-                x = d.getDayscore();
-            }
-
-        }
-        //System.out.println(x);
-
-        ArrayList<Day> optimaldays = getDaysWithScore(Alldays, x);
-        // System.out.println(optimaldays);
-        //find optimal size
-        //find optimal hours
-        Day d = RandomDay(optimaldays);
-        //System.out.println(optimaldays);
-        //int time = makeTaskBlock(d, taskname, plannedHours);
-
-        //plannedHours = time;
-        Taskblock t = d.getlargestFreehours(taskname);
-        //d.addscore(5);
-        //plannedHours= plannedHours-2;
-        if (plannedHours > 0) {
-
-            placeTask(Alldays, plannedHours, taskname);
-
-        } else {
-            //task database
-            return;
-
-        }
-
-    }
-
-
-    public int makeTaskBlock(Day d, String taskname, int planh) {
-        Date date = d.getDate();
-
-        //day get ideal timeblock.
-        Taskblock t = new Taskblock(date, 100, 300, taskname);
-        generatedtasks.add(t);
-        int time = t.getDuration();
-        return planh - time;
-    }
-
-        public Day RandomDay (ArrayList<Day> e) {
-            Random rand = new Random();
-            int random = rand.nextInt(e.size());
-            return e.get(random);
-        }
-
-            private int getDaysUntilDeadline (Calendar currentDate, Calendar deadline){
-                return Util.daysBetween(currentDate.getTime(), deadline.getTime());
-            }
-
-            public ArrayList<Day> sortDays ( int amountDays){
-                ArrayList<Day> days = new ArrayList();
-                Calendar calendar = Util.createCalender(Instant.now().toEpochMilli());
-                for (int i = 0; i < amountDays; i++) {
-                    days.add(new Day() {{
-                        setDate(calendar.getTime());
-                    }});
-                    calendar.add(Calendar.DATE, 1);
+        Object[] keySet = days.keySet().toArray();
+        int lowest = days.get(keySet[0]).getDayscore();
+        for (int i = 1; i < keySet.length; i++){
+            LocalDate date = (LocalDate) keySet[i];
+            if (date.isBefore(deadline)) {
+                if (days.get(keySet[i]).getDayscore() < lowest) {
+                    lowest = days.get(keySet[i]).getDayscore();
                 }
-                return days;
             }
+        }
 
-            public void addAppointments (JSONObject input, ArrayList < Day > days){
-
-                String futureDate = Util.DateToString(Util.createCalender(new Date(Instant.now().toEpochMilli() + (long) (1000 * 60 * 60 * 24 * 364 * 50 * 100)).getTime()));
-                String userToken = input.getString("token");
-                String timezoneOffset = input.getString("timeOffset");
-
-                TimeElementDatabase database = new TimeElementDatabase();
-                ArrayList<Appointment> appointments = new ArrayList<>();
-
-                database.getAppointmentsOnDate(new JSONArray(),Util.DateToString(today), futureDate, userToken, timezoneOffset).forEach(appointment->{
-                    appointments.add(JsonElementParser.parseDateAppointment((JSONObject) appointment));
-                });
-
-                database.getAppointmentsOnRepeat(new JSONArray(),userToken,timezoneOffset).forEach(appointment->{
-                    appointments.add(JsonElementParser.parseRepeatingAppointment((JSONObject) appointment));
-                });
-
-            }
-
-            public boolean isPlannable(Task task){
-                Calendar today = Util.createCalender(Instant.now().toEpochMilli());
-                Calendar deadline = task.getDeadline();
-
-                int talliedDays = getDaysUntilDeadline(today, deadline);
-                List<Day> sortedDays = sortDays(talliedDays);
-
-
-                for (Day d : sortedDays) {
-                    /** do stuff*/
-                    return true;
+        int finalLowest = lowest;
+        days.forEach((key, value) -> {
+            if (value.getDayscore() == finalLowest) {
+                if (key.isBefore(deadline)) {
+                    output.put(key, value);
                 }
-                return false;
             }
+        });
+        return output;
+    }
 
 
 }

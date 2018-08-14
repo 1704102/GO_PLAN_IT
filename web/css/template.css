@@ -94,6 +94,18 @@ table tr th{
     background-color: rgba(181, 181, 181, 0.18);
 }
 
+#timeDiv{
+    position: absolute;
+    width: calc(100%/7 - 0.5px);
+    height: 3px;
+    background-color: green;
+    z-index: 1;
+}
+
+.today{
+    background-color: grey;
+}
+
 .overlay{
     position: absolute;
     left: 12.5%;
@@ -106,6 +118,7 @@ table tr th{
     position: absolute;
     width: calc(100%/7 - 0.5px);
     color: white;
+    z-index: 0;
 }
 .task{
     background-color: rgb(255, 0, 0);

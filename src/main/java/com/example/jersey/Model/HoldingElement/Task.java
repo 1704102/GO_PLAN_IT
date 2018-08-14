@@ -1,22 +1,23 @@
 package com.example.jersey.Model.HoldingElement;
 
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Task {
 
     private String name;
-    private Calendar deadline;
-
-    private boolean finished;
+    private LocalDate deadline;
+    private Time time;
 
     private ArrayList<SubTask> subTasks;
 
-    public Task(String name, Calendar deadline, boolean finished, ArrayList<SubTask> subTasks) {
+    public Task(String name, LocalDate deadline,Time time, ArrayList<SubTask> subTasks) {
         this.name = name;
         this.deadline = deadline;
-        this.finished = finished;
         this.subTasks = subTasks;
+        this.time = time;
     }
 
     public int getTotalEstimatedHours(){
@@ -27,6 +28,15 @@ public class Task {
         return total;
     }
 
+    public ArrayList<Taskblock> getTaskBocks(int duration){
+        ArrayList<Taskblock> taskBlocks = new ArrayList<>();
+        int temp = (int) Math.ceil((double)getTotalEstimatedHours() / duration);;
+        for(int i = 0; i < temp; i++){
+            taskBlocks.add(new Taskblock(this));
+        }
+        return taskBlocks;
+    }
+
     public String getName() {
         return name;
     }
@@ -35,20 +45,12 @@ public class Task {
         this.name = name;
     }
 
-    public Calendar getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Calendar deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
-    }
-
-    public boolean isFinished() {
-        return finished;
-    }
-
-    public void setFinished(boolean finished) {
-        this.finished = finished;
     }
 
     public ArrayList<SubTask> getSubTasks() {
@@ -57,5 +59,13 @@ public class Task {
 
     public void setSubTasks(ArrayList<SubTask> subTasks) {
         this.subTasks = subTasks;
+    }
+
+    public int getTotalHours() {
+        int totalHours = 0;
+        for (SubTask subTask: subTasks){
+            totalHours += subTask.getEstimatedHours();
+        }
+        return totalHours;
     }
 }
